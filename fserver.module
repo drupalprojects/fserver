@@ -98,28 +98,28 @@ function fserver_cck_options($type = 'core') {
   switch ($type) {
     case 'core':
       $result =  drupal_map_assoc(array('5.x', '6.x', '7.x'));
-    break;
+      break;
     case 'major':
       $major = range(0, 50);
       unset($major[0]);
       $result =  $major;
-    break;
+      break;
     case 'method':
       $result =  array(
         0 => t('Manual upload'),
         'git' => t('GIT repository tags'),
         'svn' => t('SVN repository tags folder'),
       );
-    break;
+      break;
     case 'patch':
       $result = range(0, 50);
-    break;
+      break;
     case 'recommended':
       $result =  array(t('Not recommended'), t('Recommended'));
-    break;
+      break;
     case 'security':
       $result =  array(t('Not a security release'), t('Security release'));
-    break;
+      break;
     case 'type':
       // We don't use t() here as the update XML requires these strings to be uniform.
       $result = array(
@@ -130,6 +130,23 @@ function fserver_cck_options($type = 'core') {
         // 'theme engine' => 'Theme engines',
         // 'translation' => 'Translations',
       );
+      break;
+    case 'extratype':
+      // We don't use t() here as the update XML requires these strings to be uniform.
+      $result = array(
+        50 => '- None -',
+        40 => 'rc',
+        30 => 'beta',
+        20 => 'alpha',
+        10 => 'unstable',
+        0 => 'other',
+      );
+      break;
+    case 'extranum':
+      $extranum = range(0, 50);
+      unset($extranum[0]);
+      $result =  $extranum;
+      break;
   }
 
   drupal_alter('fserver_cck_options', $result, $type);

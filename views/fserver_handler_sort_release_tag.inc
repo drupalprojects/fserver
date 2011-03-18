@@ -30,7 +30,8 @@ class fserver_handler_sort_release_tag extends views_handler_sort {
     $fields = array(
       array('field_name' => 'field_fserver_versionmajor'),
       array('field_name' => 'field_fserver_versionpatch'),
-      array('field_name' => 'field_fserver_versionextra'),
+      array('field_name' => 'field_fserver_versionextratype'),
+      array('field_name' => 'field_fserver_versionextranum'),
     );
     foreach ($fields as $field) {
       $column = $field['field_name'] .'_value';

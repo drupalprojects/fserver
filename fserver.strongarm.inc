@@ -24,12 +24,13 @@ function fserver_strongarm() {
   $strongarm->api_version = 1;
   $strongarm->name = 'content_extra_weights_fserver_release';
   $strongarm->value = array(
-    'title' => '-5',
-    'body_field' => '0',
-    'revision_information' => '20',
+    'title' => '-3',
+    'body_field' => '-1',
+    'revision_information' => '1',
+    'author' => '0',
+    'options' => '2',
     'menu' => '-2',
-    'book' => '10',
-    'attachments' => '30',
+    'path' => '3',
   );
 
   $export['content_extra_weights_fserver_release'] = $strongarm;

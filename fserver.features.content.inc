@@ -408,7 +408,7 @@ function fserver_content_default_fields() {
       ),
       'default_value_php' => NULL,
       'label' => 'Core compatibility',
-      'weight' => '-10',
+      'weight' => '-11',
       'description' => '',
       'type' => 'optionwidgets_select',
       'module' => 'optionwidgets',
@@ -518,7 +518,7 @@ function fserver_content_default_fields() {
       'fallback' => 'select',
       'edit_fallback' => 0,
       'label' => 'Project',
-      'weight' => '-11',
+      'weight' => '-12',
       'description' => 'Select your project from the box.',
       'type' => 'nodereference_url',
       'module' => 'nodereference_url',
@@ -566,7 +566,7 @@ function fserver_content_default_fields() {
       ),
       'default_value_php' => NULL,
       'label' => 'Recommended',
-      'weight' => '-6',
+      'weight' => '-5',
       'description' => 'The recommended releases will be displayed on the project page. The latest recommended release per major version will be offered for update status.',
       'type' => 'optionwidgets_onoff',
       'module' => 'optionwidgets',
@@ -614,7 +614,7 @@ function fserver_content_default_fields() {
       ),
       'default_value_php' => NULL,
       'label' => 'Security release',
-      'weight' => '-5',
+      'weight' => '-4',
       'description' => '',
       'type' => 'optionwidgets_onoff',
       'module' => 'optionwidgets',
@@ -665,10 +665,116 @@ function fserver_content_default_fields() {
       ),
       'default_value_php' => NULL,
       'label' => 'Extra version',
-      'weight' => '-7',
+      'weight' => '-8',
       'description' => '',
       'type' => 'text_textfield',
       'module' => 'text',
+    ),
+  );
+
+  // Exported field: field_fserver_versionextranum
+  $fields['fserver_release-field_fserver_versionextranum'] = array(
+    'field_name' => 'field_fserver_versionextranum',
+    'type_name' => 'fserver_release',
+    'display_settings' => array(
+      'label' => array(
+        'format' => 'above',
+        'exclude' => 0,
+      ),
+      'teaser' => array(
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'full' => array(
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      '4' => array(
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'token' => array(
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+    ),
+    'widget_active' => '1',
+    'type' => 'number_integer',
+    'required' => '0',
+    'multiple' => '0',
+    'module' => 'number',
+    'active' => '1',
+    'prefix' => '',
+    'suffix' => '',
+    'min' => '',
+    'max' => '',
+    'allowed_values' => '',
+    'allowed_values_php' => 'return fserver_cck_options(\'extranum\');',
+    'widget' => array(
+      'default_value' => array(
+        '0' => array(
+          'value' => '',
+        ),
+      ),
+      'default_value_php' => NULL,
+      'label' => 'Extra version number',
+      'weight' => '-6',
+      'description' => 'This is the number of the extra.',
+      'type' => 'optionwidgets_select',
+      'module' => 'optionwidgets',
+    ),
+  );
+
+  // Exported field: field_fserver_versionextratype
+  $fields['fserver_release-field_fserver_versionextratype'] = array(
+    'field_name' => 'field_fserver_versionextratype',
+    'type_name' => 'fserver_release',
+    'display_settings' => array(
+      'label' => array(
+        'format' => 'above',
+        'exclude' => 0,
+      ),
+      'teaser' => array(
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'full' => array(
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      '4' => array(
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'token' => array(
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+    ),
+    'widget_active' => '1',
+    'type' => 'number_integer',
+    'required' => '1',
+    'multiple' => '0',
+    'module' => 'number',
+    'active' => '1',
+    'prefix' => '',
+    'suffix' => '',
+    'min' => '',
+    'max' => '',
+    'allowed_values' => '',
+    'allowed_values_php' => 'return fserver_cck_options(\'extratype\');',
+    'widget' => array(
+      'default_value' => array(
+        '0' => array(
+          'value' => '',
+        ),
+      ),
+      'default_value_php' => NULL,
+      'label' => 'Extra version type',
+      'weight' => '-7',
+      'description' => '',
+      'type' => 'optionwidgets_select',
+      'module' => 'optionwidgets',
     ),
   );
 
@@ -715,7 +821,7 @@ function fserver_content_default_fields() {
       ),
       'default_value_php' => NULL,
       'label' => 'Major version',
-      'weight' => '-9',
+      'weight' => '-10',
       'description' => '',
       'type' => 'optionwidgets_select',
       'module' => 'optionwidgets',
@@ -765,7 +871,7 @@ function fserver_content_default_fields() {
       ),
       'default_value_php' => NULL,
       'label' => 'Patch version',
-      'weight' => '-8',
+      'weight' => '-9',
       'description' => '',
       'type' => 'optionwidgets_select',
       'module' => 'optionwidgets',
@@ -777,6 +883,8 @@ function fserver_content_default_fields() {
   t('Core compatibility');
   t('Drush Make Script');
   t('Extra version');
+  t('Extra version number');
+  t('Extra version type');
   t('Machine name');
   t('Major version');
   t('Package');
