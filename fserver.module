@@ -2,6 +2,13 @@
 
 include_once('fserver.features.inc');
 
+define('FSERVER_EXTRATYPE_RELEASE', 50);
+define('FSERVER_EXTRATYPE_RC', 40);
+define('FSERVER_EXTRATYPE_BETA', 30);
+define('FSERVER_EXTRATYPE_ALPHA', 20);
+define('FSERVER_EXTRATYPE_UNSTABLE', 10);
+define('FSERVER_EXTRATYPE_OTHER', 0);
+
 /**
  * Implementation of hook_link().
  */
@@ -134,12 +141,12 @@ function fserver_cck_options($type = 'core') {
     case 'extratype':
       // We don't use t() here as the update XML requires these strings to be uniform.
       $result = array(
-        50 => '- None -',
-        40 => 'rc',
-        30 => 'beta',
-        20 => 'alpha',
-        10 => 'unstable',
-        0 => 'other',
+        FSERVER_EXTRATYPE_RELEASE  => '- None -',
+        FSERVER_EXTRATYPE_RC       => 'rc',
+        FSERVER_EXTRATYPE_BETA     => 'beta',
+        FSERVER_EXTRATYPE_ALPHA    => 'alpha',
+        FSERVER_EXTRATYPE_UNSTABLE => 'unstable',
+        FSERVER_EXTRATYPE_OTHER    => 'other',
       );
       break;
     case 'extranum':
@@ -160,25 +167,38 @@ function fserver_cck_options($type = 'core') {
 function fserver_parse_package_name($package_filename) {
   // example: fserver-6.x-2.0-rc3.tar.gz
   if (preg_match('/^(?<project>\w+)-(?<core>\d+\.x)-(?<major>\d+)\.(?<patch>\d+)-?(?<extra>\w+)?\.(tar\.gz|tgz)$/', $package_filename, $matches)) {
+    if (!empty($matches['extra']) && preg_match('/^(?P<extratype>[A-Za-z]+)(?P<extranum>\d+)?$/', $matches['extra'], $extra_matches)) {
+      $matches = array_merge($matches, array_intersect_key($extra_matches, array('extratype' => '', 'extranum' => '')));
+    }
     return $matches;
   };
   return array();
 }
 
 /**
- * Parse a package name into values: core, major, patch and extra.
+ * Parse a tag name into values: core, major, patch and extra, extra type and extra num.
+ *
+ * Supports CVS style drupal tags (drupal-6--1-0-alpha1) as well as git style tags (7.x-1.0-alpha1).
  */
 function fserver_parse_tag_name($tag) {
-  // example: drupal-6--1-0-alpha1
-  if (preg_match('/^(?P<project>\w+)-(?P<core>\d+)--(?P<major>\d+)-(?P<patch>\d+)-?(?P<extra>\w+)?$/', $tag, $matches)) {
+
+  $regex = (stripos($tag, 'drupal-') === 0)
+              ? '/^(?P<project>\w+)-(?P<core>\d+)--(?P<major>\d+)-(?P<patch>\d+)-?(?P<extra>\w+)?$/'
+              : '/^(?P<core>\d+)\.x-(?P<major>\d+)\.(?P<patch>\d+)-?(?P<extra>\w+)?$/';
+
+  if (preg_match($regex, $tag, $matches)) {
     $parsed = array_intersect_key($matches, array('core' => '', 'major' => '', 'patch' => '', 'extra' => ''));
     if (!empty($parsed)) {
-      $parsed['core'] = "{$parsed['core']}.x";
       $parsed['original'] = $tag;
+      $parsed['core'] = "{$parsed['core']}.x";
       $parsed['version'] = "{$parsed['core']}-{$parsed['major']}.{$parsed['patch']}" . (!empty($parsed['extra']) ? "-{$parsed['extra']}" : '');
+      if (!empty($parsed['extra']) && preg_match('/^(?P<extratype>[A-Za-z]+)(?P<extranum>\d+)?$/', $parsed['extra'], $extra_matches)) {
+        $parsed = array_merge($parsed, array_intersect_key($extra_matches, array('extratype' => '', 'extranum' => '')));
+      }
       return $parsed;
     }
   }
+
   return array();
 }
 

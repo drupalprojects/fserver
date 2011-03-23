@@ -239,6 +239,18 @@ class FserverProject {
       $node->field_fserver_versionpatch = array(0 => array('value' => $tag['patch']));
       $node->field_fserver_versionextra = array(0 => array('value' => $tag['extra']));
 
+      // Handle the release extra info
+      $extratype = FSERVER_EXTRATYPE_RELEASE;
+      $extranum = NULL;
+      if (!empty($tag['extra'])) {
+        $extratypes = fserver_cck_options('extratype');
+        $extratypes = array_flip($extratypes);
+        $extratype = array_key_exists($tag['extratype'], $extratypes) ? $extratypes[$tag['extratype']] : FSERVER_EXTRATYPE_OTHER;
+        $extranum = $tag['extranum'];
+      }
+      $node->field_fserver_versionextratype = array(0 => array('value' => $extratype));
+      $node->field_fserver_versionextranum = array(0 => array('value' => $extranum));
+
       // @TODO
       $node->field_fserver_recommended = array(0 => array('value' => 1));
       $node->field_fserver_security = array(0 => array('value' => 0));
@@ -725,6 +737,18 @@ class FserverDistro {
       $node->field_fserver_versionmajor = array(0 => array('value' => $version['major']));
       $node->field_fserver_versionpatch = array(0 => array('value' => $version['patch']));
       $node->field_fserver_versionextra = array(0 => array('value' => $version['extra']));
+
+      // Handle the release extra info
+      $extratype = FSERVER_EXTRATYPE_RELEASE;
+      $extranum = NULL;
+      if (!empty($version['extra'])) {
+        $extratypes = fserver_cck_options('extratype');
+        $extratypes = array_flip($extratypes);
+        $extratype = array_key_exists($tag['extratype'], $extratypes) ? $extratypes[$version['extratype']] : FSERVER_EXTRATYPE_OTHER;
+        $extranum = $version['extranum'];
+      }
+      $node->field_fserver_versionextratype = array(0 => array('value' => $extratype));
+      $node->field_fserver_versionextranum = array(0 => array('value' => $extranum));
 
       // @TODO
       $node->field_fserver_recommended = array(0 => array('value' => 1));
