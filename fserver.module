@@ -162,6 +162,17 @@ function fserver_parse_tag_name($tag) {
       return $parsed;
     }
   }
+  // alternativly example: 6.x-2.x-rc1
+  if (preg_match('/^(?P<core>\d+\.x)-(?P<major>\d+)\.(?P<patch>\d+)-?(?P<extra>\w+)?$/', $tag, $matches)) {
+    $parsed = array_intersect_key($matches, array('core' => '', 'major' => '', 'patch' => '', 'extra' => ''));
+    if (!empty($parsed)) {
+      $parsed['core'] = "{$parsed['core']}";
+      $parsed['original'] = $tag;
+      $parsed['version'] = "{$parsed['core']}-{$parsed['major']}.{$parsed['patch']}" . (!empty($parsed['extra']) ? "-{$parsed['extra']}" : '');
+      return $parsed;
+    }
+  }
+
   return array();
 }
 
