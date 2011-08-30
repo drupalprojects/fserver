@@ -101,7 +101,7 @@ class fserver_plugin_style_updatexml extends views_plugin_style {
     // If this is a legacy project and has a redirect URL use it immediately.
     if (!empty($project['redirect'])) {
       $redirect = $project['redirect'];
-      $redirect .= !empty($vars['view']->args) ? '/'. implode('/', $vars['view']->args) : '';
+      $redirect .= !empty($vars['view']->args) ? '/' . implode('/', $vars['view']->args) : '';
       drupal_goto($redirect);
     }
 
@@ -114,7 +114,7 @@ class fserver_plugin_style_updatexml extends views_plugin_style {
     $releases = array();
     $project['recommended_major'] = '';
     $project['supported_majors'] = array();
-    
+
     // Helper array for detecting multiple API Versions... (not the best way?)
     $multiple_api_versions = array();
 
@@ -137,15 +137,15 @@ class fserver_plugin_style_updatexml extends views_plugin_style {
           }
         }
       }
-      
+
       // manual mapping from project api field to release api field
       $project_api_version_mapping = $fields[$vars['options']['project']['api_version']]->field_alias;
-      if(isset($row->{$project_api_version_mapping})) {
+      if (isset($row->{$project_api_version_mapping})) {
         $releases[$num]['api_version'] = $fields[$vars['options']['project']['api_version']]->theme($row);
         // add current version to helper array...
         $multiple_api_versions[$releases[$num]['api_version']] = $releases[$num]['api_version'];
       }
-      
+
       if ($releases[$num]['recommended']) {
         // Use the first major version for the project major.
         // The list is sorted by "major desc", this way the latest branch will be
@@ -175,7 +175,7 @@ class fserver_plugin_style_updatexml extends views_plugin_style {
 
     sort($project['supported_majors']);
     $project['supported_majors'] = implode(",", $project['supported_majors']);
-    
+
     // overwrite projects api version if we have multiple versions to "all"
     if (count($multiple_api_versions) > 1) {
       $project['api_version'] = 'all';
@@ -184,6 +184,10 @@ class fserver_plugin_style_updatexml extends views_plugin_style {
     // Finalize
     $vars['project'] = $project;
     $vars['releases'] = $releases;
-    drupal_set_header('Content-Type: application/xml; charset=utf-8');
+     
+    // This will break the views edit screen if previewing.
+    if (arg(0) == 'fserver') {
+      drupal_add_http_header('Content-Type', 'application/xml; charset=utf-8');
+    }
   }
 }

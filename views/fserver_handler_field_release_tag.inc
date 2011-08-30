@@ -13,18 +13,33 @@ class fserver_handler_field_release_tag extends views_handler_field {
   function construct() {
     parent::construct();
     $fields = array(
-      0 => array('alias'=> 'core', 'field_name' => 'field_fserver_api'),
-      1 => array('alias'=> 'major', 'field_name' => 'field_fserver_versionmajor'),
-      2 => array('alias'=> 'patch', 'field_name' => 'field_fserver_versionpatch'),
-      3 => array('alias'=> 'extra', 'field_name' => 'field_fserver_versionextra'),
+      0 => array(
+        'alias' => 'core',
+        'field_name' => 'field_fserver_api',
+      ),
+      1 => array(
+        'alias' => 'major',
+        'field_name' => 'field_fserver_versionmajor',
+      ),
+      2 => array(
+        'alias' => 'patch',
+        'field_name' => 'field_fserver_versionpatch',
+      ),
+      3 => array(
+        'alias' => 'extra',
+        'field_name' => 'field_fserver_versionextra',
+      ),
     );
 
     foreach ($fields as $field) {
       $alias = $field['alias'];
       $table = content_views_tablename($field);
-      $column = $field['field_name'] .'_value';
+      $column = $field['field_name'] . '_value';
 
-      $this->additional_fields[$alias] = array('table' => $table, 'field' => $column);
+      $this->additional_fields[$alias] = array(
+        'table' => $table,
+        'field' => $column,
+      );
     }
   }
 

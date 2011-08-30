@@ -1,1695 +1,837 @@
 <?php
+/**
+ * @file
+ * fserver.views_default.inc
+ */
 
 /**
  * Implementation of hook_views_default_views().
  */
 function fserver_views_default_views() {
-  $views = array();
+  $export = array();
 
-  // Exported view: fserver_projects
   $view = new view;
   $view->name = 'fserver_projects';
-  $view->description = 'Feature Server > Projects';
-  $view->tag = 'fserver';
-  $view->view_php = '';
+  $view->description = '';
+  $view->tag = 'default';
   $view->base_table = 'node';
-  $view->is_cacheable = FALSE;
-  $view->api_version = 2;
+  $view->human_name = 'Projects and Distributions';
+  $view->core = 7;
+  $view->api_version = '3.0-alpha1';
   $view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
-  $handler = $view->new_display('default', 'Defaults', 'default');
-  $handler->override_option('fields', array(
-    'title' => array(
-      'label' => '',
-      'alter' => array(
-        'alter_text' => 0,
-        'text' => '',
-        'make_link' => 0,
-        'path' => '',
-        'link_class' => '',
-        'alt' => '',
-        'prefix' => '',
-        'suffix' => '',
-        'help' => '',
-        'trim' => 0,
-        'max_length' => '',
-        'word_boundary' => 1,
-        'ellipsis' => 1,
-        'strip_tags' => 0,
-        'html' => 0,
-      ),
-      'link_to_node' => 1,
-      'exclude' => 0,
-      'id' => 'title',
-      'table' => 'node',
-      'field' => 'title',
-      'relationship' => 'none',
-    ),
-    'teaser' => array(
-      'label' => '',
-      'alter' => array(
-        'alter_text' => 0,
-        'text' => '',
-        'make_link' => 0,
-        'path' => '',
-        'link_class' => '',
-        'alt' => '',
-        'prefix' => '',
-        'suffix' => '',
-        'help' => '',
-        'trim' => 1,
-        'max_length' => '100',
-        'word_boundary' => 1,
-        'ellipsis' => 1,
-        'strip_tags' => 1,
-        'html' => 0,
-      ),
-      'exclude' => 0,
-      'id' => 'teaser',
-      'table' => 'node_revisions',
-      'field' => 'teaser',
-      'relationship' => 'none',
-    ),
-  ));
-  $handler->override_option('sorts', array(
-    'title' => array(
-      'order' => 'ASC',
-      'id' => 'title',
-      'table' => 'node',
-      'field' => 'title',
-      'relationship' => 'none',
-    ),
-  ));
-  $handler->override_option('filters', array(
-    'status' => array(
-      'operator' => '=',
-      'value' => '1',
-      'group' => '0',
-      'exposed' => FALSE,
-      'expose' => array(
-        'operator' => FALSE,
-        'label' => '',
-      ),
-      'id' => 'status',
-      'table' => 'node',
-      'field' => 'status',
-      'relationship' => 'none',
-    ),
-    'type' => array(
-      'operator' => 'in',
-      'value' => array(
-        'fserver_distro' => 'fserver_distro',
-        'fserver_project' => 'fserver_project',
-      ),
-      'group' => '0',
-      'exposed' => FALSE,
-      'expose' => array(
-        'operator' => FALSE,
-        'label' => '',
-      ),
-      'id' => 'type',
-      'table' => 'node',
-      'field' => 'type',
-      'relationship' => 'none',
-    ),
-  ));
-  $handler->override_option('access', array(
-    'type' => 'none',
-  ));
-  $handler->override_option('cache', array(
-    'type' => 'none',
-  ));
-  $handler->override_option('title', 'Projects and distributions');
-  $handler->override_option('empty', 'There are currently no projects or distributions available.');
-  $handler->override_option('items_per_page', 20);
-  $handler->override_option('use_pager', '1');
-  $handler->override_option('style_plugin', 'grid');
-  $handler->override_option('style_options', array(
-    'grouping' => '',
-    'columns' => '2',
-    'alignment' => 'vertical',
-  ));
-  $handler = $view->new_display('page', 'Page', 'page_1');
-  $handler->override_option('path', 'fserver');
-  $handler->override_option('menu', array(
-    'type' => 'normal',
-    'title' => 'Projects',
-    'description' => '',
-    'weight' => '0',
-    'name' => 'features',
-  ));
-  $handler->override_option('tab_options', array(
-    'type' => 'none',
-    'title' => '',
-    'description' => '',
-    'weight' => 0,
-    'name' => 'navigation',
-  ));
 
-  $views[$view->name] = $view;
+  /* Display: Master */
+  $handler = $view->new_display('default', 'Master', 'default');
+  $handler->display->display_options['title'] = 'Projects and Distributions';
+  $handler->display->display_options['access']['type'] = 'perm';
+  $handler->display->display_options['cache']['type'] = 'none';
+  $handler->display->display_options['query']['type'] = 'views_query';
+  $handler->display->display_options['query']['options']['query_comment'] = FALSE;
+  $handler->display->display_options['exposed_form']['type'] = 'basic';
+  $handler->display->display_options['pager']['type'] = 'full';
+  $handler->display->display_options['pager']['options']['items_per_page'] = '20';
+  $handler->display->display_options['style_plugin'] = 'grid';
+  $handler->display->display_options['row_plugin'] = 'node';
+  $handler->display->display_options['row_options']['links'] = FALSE;
+  /* Field: Content: Title */
+  $handler->display->display_options['fields']['title']['id'] = 'title';
+  $handler->display->display_options['fields']['title']['table'] = 'node';
+  $handler->display->display_options['fields']['title']['field'] = 'title';
+  $handler->display->display_options['fields']['title']['label'] = '';
+  $handler->display->display_options['fields']['title']['alter']['alter_text'] = 0;
+  $handler->display->display_options['fields']['title']['alter']['make_link'] = 0;
+  $handler->display->display_options['fields']['title']['alter']['absolute'] = 0;
+  $handler->display->display_options['fields']['title']['alter']['word_boundary'] = 0;
+  $handler->display->display_options['fields']['title']['alter']['ellipsis'] = 0;
+  $handler->display->display_options['fields']['title']['alter']['strip_tags'] = 0;
+  $handler->display->display_options['fields']['title']['alter']['trim'] = 0;
+  $handler->display->display_options['fields']['title']['alter']['html'] = 0;
+  $handler->display->display_options['fields']['title']['hide_empty'] = 0;
+  $handler->display->display_options['fields']['title']['empty_zero'] = 0;
+  $handler->display->display_options['fields']['title']['link_to_node'] = 1;
+  /* Sort criterion: Content: Post date */
+  $handler->display->display_options['sorts']['created']['id'] = 'created';
+  $handler->display->display_options['sorts']['created']['table'] = 'node';
+  $handler->display->display_options['sorts']['created']['field'] = 'created';
+  $handler->display->display_options['sorts']['created']['order'] = 'DESC';
+  /* Filter criterion: Content: Published */
+  $handler->display->display_options['filters']['status']['id'] = 'status';
+  $handler->display->display_options['filters']['status']['table'] = 'node';
+  $handler->display->display_options['filters']['status']['field'] = 'status';
+  $handler->display->display_options['filters']['status']['value'] = 1;
+  $handler->display->display_options['filters']['status']['group'] = 0;
+  $handler->display->display_options['filters']['status']['expose']['operator'] = FALSE;
+  /* Filter criterion: Content: Type */
+  $handler->display->display_options['filters']['type']['id'] = 'type';
+  $handler->display->display_options['filters']['type']['table'] = 'node';
+  $handler->display->display_options['filters']['type']['field'] = 'type';
+  $handler->display->display_options['filters']['type']['value'] = array(
+    'fserver_distro' => 'fserver_distro',
+    'fserver_project' => 'fserver_project',
+  );
 
-  // Exported view: fserver_release_lookup
+  /* Display: Page */
+  $handler = $view->new_display('page', 'Page', 'page');
+  $handler->display->display_options['path'] = 'fserver';
+  $export['fserver_projects'] = $view;
+
   $view = new view;
   $view->name = 'fserver_release_lookup';
   $view->description = '';
-  $view->tag = 'fserver';
-  $view->view_php = '';
+  $view->tag = 'default';
   $view->base_table = 'node';
-  $view->is_cacheable = FALSE;
-  $view->api_version = 2;
+  $view->human_name = 'Release Lookup';
+  $view->core = 7;
+  $view->api_version = '3.0-alpha1';
   $view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
-  $handler = $view->new_display('default', 'Defaults', 'default');
-  $handler->override_option('fields', array(
-    'nid' => array(
-      'label' => '',
-      'alter' => array(
-        'alter_text' => 0,
-        'text' => '',
-        'make_link' => 0,
-        'path' => '',
-        'link_class' => '',
-        'alt' => '',
-        'prefix' => '',
-        'suffix' => '',
-        'target' => '',
-        'help' => '',
-        'trim' => 0,
-        'max_length' => '',
-        'word_boundary' => 1,
-        'ellipsis' => 1,
-        'strip_tags' => 0,
-        'html' => 0,
-      ),
-      'empty' => '',
-      'hide_empty' => 0,
-      'empty_zero' => 0,
-      'link_to_node' => 0,
-      'exclude' => 0,
-      'id' => 'nid',
-      'table' => 'node',
-      'field' => 'nid',
-      'relationship' => 'none',
-    ),
-  ));
-  $handler->override_option('arguments', array(
-    'field_fserver_project_nid' => array(
-      'default_action' => 'not found',
-      'style_plugin' => 'default_summary',
-      'style_options' => array(),
-      'wildcard' => 'all',
-      'wildcard_substitution' => 'All',
-      'title' => '',
-      'breadcrumb' => '',
-      'default_argument_type' => 'fixed',
-      'default_argument' => '',
-      'validate_type' => 'none',
-      'validate_fail' => 'not found',
-      'break_phrase' => 0,
-      'not' => 0,
-      'id' => 'field_fserver_project_nid',
-      'table' => 'node_data_field_fserver_project',
-      'field' => 'field_fserver_project_nid',
-      'validate_user_argument_type' => 'uid',
-      'validate_user_roles' => array(
-        '2' => 0,
-      ),
-      'relationship' => 'none',
-      'default_options_div_prefix' => '',
-      'default_argument_user' => 0,
-      'default_argument_fixed' => '',
-      'default_argument_php' => '',
-      'validate_argument_node_type' => array(
-        'feed' => 0,
-        'feed_item' => 0,
-        'fserver_project' => 0,
-        'fserver_release' => 0,
-        'fserver_distro' => 0,
-        'page' => 0,
-        'story' => 0,
-      ),
-      'validate_argument_node_access' => 0,
-      'validate_argument_nid_type' => 'nid',
-      'validate_argument_vocabulary' => array(),
-      'validate_argument_type' => 'tid',
-      'validate_argument_transform' => 0,
-      'validate_user_restrict_roles' => 0,
-      'validate_argument_php' => '',
-    ),
-    'field_fserver_api_value' => array(
-      'default_action' => 'ignore',
-      'style_plugin' => 'default_summary',
-      'style_options' => array(),
-      'wildcard' => 'all',
-      'wildcard_substitution' => 'All',
-      'title' => '',
-      'breadcrumb' => '',
-      'default_argument_type' => 'fixed',
-      'default_argument' => '',
-      'validate_type' => 'none',
-      'validate_fail' => 'not found',
-      'add_table' => 0,
-      'require_value' => 0,
-      'reduce_duplicates' => 0,
-      'id' => 'field_fserver_api_value',
-      'table' => 'node_data_field_fserver_api',
-      'field' => 'field_fserver_api_value',
-      'validate_user_argument_type' => 'uid',
-      'validate_user_roles' => array(
-        '2' => 0,
-      ),
-      'relationship' => 'none',
-      'default_options_div_prefix' => '',
-      'default_argument_user' => 0,
-      'default_argument_fixed' => '',
-      'default_argument_php' => '',
-      'validate_argument_node_type' => array(
-        'fserver_project' => 0,
-        'fserver_release' => 0,
-        'fserver_distro' => 0,
-        'page' => 0,
-        'story' => 0,
-      ),
-      'validate_argument_node_access' => 0,
-      'validate_argument_nid_type' => 'nid',
-      'validate_argument_vocabulary' => array(),
-      'validate_argument_type' => 'tid',
-      'validate_argument_transform' => 0,
-      'validate_user_restrict_roles' => 0,
-      'validate_argument_php' => '',
-    ),
-    'field_fserver_versionextra_value' => array(
-      'default_action' => 'ignore',
-      'style_plugin' => 'default_summary',
-      'style_options' => array(),
-      'wildcard' => 'all',
-      'wildcard_substitution' => 'All',
-      'title' => '',
-      'breadcrumb' => '',
-      'default_argument_type' => 'fixed',
-      'default_argument' => '',
-      'validate_type' => 'none',
-      'validate_fail' => 'not found',
-      'glossary' => 0,
-      'limit' => '0',
-      'case' => 'none',
-      'path_case' => 'none',
-      'transform_dash' => 0,
-      'id' => 'field_fserver_versionextra_value',
-      'table' => 'node_data_field_fserver_versionextra',
-      'field' => 'field_fserver_versionextra_value',
-      'validate_user_argument_type' => 'uid',
-      'validate_user_roles' => array(
-        '2' => 0,
-      ),
-      'relationship' => 'none',
-      'default_options_div_prefix' => '',
-      'default_argument_user' => 0,
-      'default_argument_fixed' => '',
-      'default_argument_php' => '',
-      'validate_argument_node_type' => array(
-        'fserver_project' => 0,
-        'fserver_release' => 0,
-        'fserver_distro' => 0,
-        'page' => 0,
-        'story' => 0,
-      ),
-      'validate_argument_node_access' => 0,
-      'validate_argument_nid_type' => 'nid',
-      'validate_argument_vocabulary' => array(),
-      'validate_argument_type' => 'tid',
-      'validate_argument_transform' => 0,
-      'validate_user_restrict_roles' => 0,
-      'validate_argument_php' => '',
-    ),
-  ));
-  $handler->override_option('filters', array(
-    'status' => array(
-      'operator' => '=',
-      'value' => '1',
-      'group' => '0',
-      'exposed' => FALSE,
-      'expose' => array(
-        'operator' => FALSE,
-        'label' => '',
-      ),
-      'id' => 'status',
-      'table' => 'node',
-      'field' => 'status',
-      'relationship' => 'none',
-    ),
-    'type' => array(
-      'operator' => 'in',
-      'value' => array(
-        'fserver_release' => 'fserver_release',
-      ),
-      'group' => '0',
-      'exposed' => FALSE,
-      'expose' => array(
-        'operator' => FALSE,
-        'label' => '',
-      ),
-      'id' => 'type',
-      'table' => 'node',
-      'field' => 'type',
-      'relationship' => 'none',
-    ),
-  ));
-  $handler->override_option('access', array(
-    'type' => 'none',
-  ));
-  $handler->override_option('cache', array(
-    'type' => 'none',
-  ));
-  $handler->override_option('items_per_page', 0);
 
-  $views[$view->name] = $view;
+  /* Display: Master */
+  $handler = $view->new_display('default', 'Master', 'default');
+  $handler->display->display_options['access']['type'] = 'perm';
+  $handler->display->display_options['cache']['type'] = 'none';
+  $handler->display->display_options['query']['type'] = 'views_query';
+  $handler->display->display_options['query']['options']['query_comment'] = FALSE;
+  $handler->display->display_options['exposed_form']['type'] = 'basic';
+  $handler->display->display_options['pager']['type'] = 'none';
+  $handler->display->display_options['pager']['options']['offset'] = '0';
+  $handler->display->display_options['style_plugin'] = 'default';
+  $handler->display->display_options['row_plugin'] = 'fields';
+  /* Field: Content: Nid */
+  $handler->display->display_options['fields']['nid']['id'] = 'nid';
+  $handler->display->display_options['fields']['nid']['table'] = 'node';
+  $handler->display->display_options['fields']['nid']['field'] = 'nid';
+  $handler->display->display_options['fields']['nid']['label'] = '';
+  $handler->display->display_options['fields']['nid']['alter']['alter_text'] = 0;
+  $handler->display->display_options['fields']['nid']['alter']['make_link'] = 0;
+  $handler->display->display_options['fields']['nid']['alter']['absolute'] = 0;
+  $handler->display->display_options['fields']['nid']['alter']['external'] = 0;
+  $handler->display->display_options['fields']['nid']['alter']['replace_spaces'] = 0;
+  $handler->display->display_options['fields']['nid']['alter']['trim_whitespace'] = 0;
+  $handler->display->display_options['fields']['nid']['alter']['nl2br'] = 0;
+  $handler->display->display_options['fields']['nid']['alter']['word_boundary'] = 1;
+  $handler->display->display_options['fields']['nid']['alter']['ellipsis'] = 1;
+  $handler->display->display_options['fields']['nid']['alter']['strip_tags'] = 0;
+  $handler->display->display_options['fields']['nid']['alter']['trim'] = 0;
+  $handler->display->display_options['fields']['nid']['alter']['html'] = 0;
+  $handler->display->display_options['fields']['nid']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['nid']['element_default_classes'] = 1;
+  $handler->display->display_options['fields']['nid']['hide_empty'] = 0;
+  $handler->display->display_options['fields']['nid']['empty_zero'] = 0;
+  $handler->display->display_options['fields']['nid']['hide_alter_empty'] = 0;
+  $handler->display->display_options['fields']['nid']['link_to_node'] = 0;
+  /* Contextual filter: Content: Project (field_fserver_project) */
+  $handler->display->display_options['arguments']['field_fserver_project_nid']['id'] = 'field_fserver_project_nid';
+  $handler->display->display_options['arguments']['field_fserver_project_nid']['table'] = 'field_data_field_fserver_project';
+  $handler->display->display_options['arguments']['field_fserver_project_nid']['field'] = 'field_fserver_project_nid';
+  $handler->display->display_options['arguments']['field_fserver_project_nid']['default_action'] = 'not found';
+  $handler->display->display_options['arguments']['field_fserver_project_nid']['default_argument_type'] = 'fixed';
+  $handler->display->display_options['arguments']['field_fserver_project_nid']['default_argument_skip_url'] = 0;
+  $handler->display->display_options['arguments']['field_fserver_project_nid']['summary']['number_of_records'] = '0';
+  $handler->display->display_options['arguments']['field_fserver_project_nid']['summary']['format'] = 'default_summary';
+  $handler->display->display_options['arguments']['field_fserver_project_nid']['summary_options']['items_per_page'] = '25';
+  $handler->display->display_options['arguments']['field_fserver_project_nid']['break_phrase'] = 0;
+  $handler->display->display_options['arguments']['field_fserver_project_nid']['not'] = 0;
+  /* Contextual filter: Content: Core compatibility (field_fserver_api) */
+  $handler->display->display_options['arguments']['field_fserver_api_value']['id'] = 'field_fserver_api_value';
+  $handler->display->display_options['arguments']['field_fserver_api_value']['table'] = 'field_data_field_fserver_api';
+  $handler->display->display_options['arguments']['field_fserver_api_value']['field'] = 'field_fserver_api_value';
+  $handler->display->display_options['arguments']['field_fserver_api_value']['default_action'] = 'not found';
+  $handler->display->display_options['arguments']['field_fserver_api_value']['default_argument_type'] = 'fixed';
+  $handler->display->display_options['arguments']['field_fserver_api_value']['default_argument_skip_url'] = 0;
+  $handler->display->display_options['arguments']['field_fserver_api_value']['summary']['number_of_records'] = '0';
+  $handler->display->display_options['arguments']['field_fserver_api_value']['summary']['format'] = 'default_summary';
+  $handler->display->display_options['arguments']['field_fserver_api_value']['summary_options']['items_per_page'] = '25';
+  $handler->display->display_options['arguments']['field_fserver_api_value']['glossary'] = 0;
+  $handler->display->display_options['arguments']['field_fserver_api_value']['limit'] = '0';
+  $handler->display->display_options['arguments']['field_fserver_api_value']['transform_dash'] = 0;
+  $handler->display->display_options['arguments']['field_fserver_api_value']['break_phrase'] = 0;
+  /* Contextual filter: Content: Extra version (field_fserver_versionextra) */
+  $handler->display->display_options['arguments']['field_fserver_versionextra_value']['id'] = 'field_fserver_versionextra_value';
+  $handler->display->display_options['arguments']['field_fserver_versionextra_value']['table'] = 'field_data_field_fserver_versionextra';
+  $handler->display->display_options['arguments']['field_fserver_versionextra_value']['field'] = 'field_fserver_versionextra_value';
+  $handler->display->display_options['arguments']['field_fserver_versionextra_value']['default_argument_type'] = 'fixed';
+  $handler->display->display_options['arguments']['field_fserver_versionextra_value']['default_argument_skip_url'] = 0;
+  $handler->display->display_options['arguments']['field_fserver_versionextra_value']['summary']['number_of_records'] = '0';
+  $handler->display->display_options['arguments']['field_fserver_versionextra_value']['summary']['format'] = 'default_summary';
+  $handler->display->display_options['arguments']['field_fserver_versionextra_value']['summary_options']['items_per_page'] = '25';
+  $handler->display->display_options['arguments']['field_fserver_versionextra_value']['glossary'] = 0;
+  $handler->display->display_options['arguments']['field_fserver_versionextra_value']['limit'] = '0';
+  $handler->display->display_options['arguments']['field_fserver_versionextra_value']['transform_dash'] = 0;
+  $handler->display->display_options['arguments']['field_fserver_versionextra_value']['break_phrase'] = 0;
+  /* Filter criterion: Content: Published */
+  $handler->display->display_options['filters']['status']['id'] = 'status';
+  $handler->display->display_options['filters']['status']['table'] = 'node';
+  $handler->display->display_options['filters']['status']['field'] = 'status';
+  $handler->display->display_options['filters']['status']['value'] = 1;
+  $handler->display->display_options['filters']['status']['group'] = 0;
+  $handler->display->display_options['filters']['status']['expose']['operator'] = FALSE;
+  /* Filter criterion: Content: Type */
+  $handler->display->display_options['filters']['type']['id'] = 'type';
+  $handler->display->display_options['filters']['type']['table'] = 'node';
+  $handler->display->display_options['filters']['type']['field'] = 'type';
+  $handler->display->display_options['filters']['type']['value'] = array(
+    'fserver_release' => 'fserver_release',
+  );
+  $export['fserver_release_lookup'] = $view;
 
-  // Exported view: fserver_releases
   $view = new view;
   $view->name = 'fserver_releases';
-  $view->description = 'Feature Server > Releases';
-  $view->tag = 'fserver';
-  $view->view_php = '';
+  $view->description = '';
+  $view->tag = 'default';
   $view->base_table = 'node';
-  $view->is_cacheable = FALSE;
-  $view->api_version = 2;
+  $view->human_name = 'Releases';
+  $view->core = 7;
+  $view->api_version = '3.0-alpha1';
   $view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
-  $handler = $view->new_display('default', 'Defaults', 'default');
-  $handler->override_option('relationships', array(
-    'field_fserver_file_fid' => array(
-      'label' => 'Package',
-      'required' => 1,
-      'delta' => -1,
-      'id' => 'field_fserver_file_fid',
-      'table' => 'node_data_field_fserver_file',
-      'field' => 'field_fserver_file_fid',
-      'relationship' => 'none',
-    ),
-  ));
-  $handler->override_option('fields', array(
-    'nid' => array(
-      'label' => 'Nid',
-      'alter' => array(
-        'alter_text' => 0,
-        'text' => '',
-        'make_link' => 0,
-        'path' => '',
-        'link_class' => '',
-        'alt' => '',
-        'prefix' => '',
-        'suffix' => '',
-        'help' => '',
-        'trim' => 0,
-        'max_length' => '',
-        'word_boundary' => 1,
-        'ellipsis' => 1,
-        'strip_tags' => 0,
-        'html' => 0,
-      ),
-      'link_to_node' => 0,
-      'exclude' => 1,
-      'id' => 'nid',
-      'table' => 'node',
-      'field' => 'nid',
-      'override' => array(
-        'button' => 'Override',
-      ),
-      'relationship' => 'none',
-    ),
-    'release_tag' => array(
-      'label' => 'Release',
-      'alter' => array(
-        'alter_text' => 0,
-        'text' => '',
-        'make_link' => 1,
-        'path' => 'node/[nid]',
-        'link_class' => '',
-        'alt' => '',
-        'prefix' => '',
-        'suffix' => '',
-        'help' => '',
-        'trim' => 0,
-        'max_length' => '',
-        'word_boundary' => 1,
-        'ellipsis' => 1,
-        'strip_tags' => 0,
-        'html' => 0,
-      ),
-      'exclude' => 0,
-      'id' => 'release_tag',
-      'table' => 'views',
-      'field' => 'release_tag',
-      'override' => array(
-        'button' => 'Override',
-      ),
-      'relationship' => 'none',
-    ),
-    'filesize' => array(
-      'label' => '',
-      'alter' => array(
-        'alter_text' => 0,
-        'text' => '',
-        'make_link' => 0,
-        'path' => '',
-        'link_class' => '',
-        'alt' => '',
-        'prefix' => '',
-        'suffix' => '',
-        'help' => '',
-        'trim' => 0,
-        'max_length' => '',
-        'word_boundary' => 1,
-        'ellipsis' => 1,
-        'strip_tags' => 0,
-        'html' => 0,
-      ),
-      'file_size_display' => 'formatted',
-      'exclude' => 1,
-      'id' => 'filesize',
-      'table' => 'files',
-      'field' => 'filesize',
-      'relationship' => 'field_fserver_file_fid',
-    ),
-    'field_fserver_file_fid' => array(
-      'label' => 'Package',
-      'alter' => array(
-        'alter_text' => 1,
-        'text' => '<a href=\'[field_fserver_file_fid]\'>Download</a> ([filesize])',
-        'make_link' => 0,
-        'path' => '',
-        'link_class' => '',
-        'alt' => '',
-        'prefix' => '',
-        'suffix' => '',
-        'help' => '',
-        'trim' => 0,
-        'max_length' => '',
-        'word_boundary' => 1,
-        'ellipsis' => 1,
-        'strip_tags' => 0,
-        'html' => 0,
-      ),
-      'link_to_node' => 0,
-      'label_type' => 'widget',
-      'format' => 'url_plain',
-      'multiple' => array(
-        'group' => TRUE,
-        'multiple_number' => '',
-        'multiple_from' => '',
-        'multiple_reversed' => FALSE,
-      ),
-      'exclude' => 0,
-      'id' => 'field_fserver_file_fid',
-      'table' => 'node_data_field_fserver_file',
-      'field' => 'field_fserver_file_fid',
-      'relationship' => 'none',
-      'override' => array(
-        'button' => 'Override',
-      ),
-    ),
-    'view_node' => array(
-      'label' => '',
-      'alter' => array(
-        'alter_text' => 0,
-        'text' => '',
-        'make_link' => 0,
-        'path' => '',
-        'link_class' => '',
-        'alt' => '',
-        'prefix' => '',
-        'suffix' => '',
-        'help' => '',
-        'trim' => 0,
-        'max_length' => '',
-        'word_boundary' => 1,
-        'ellipsis' => 1,
-        'strip_tags' => 0,
-        'html' => 0,
-      ),
-      'text' => 'Release notes',
-      'exclude' => 0,
-      'id' => 'view_node',
-      'table' => 'node',
-      'field' => 'view_node',
-      'relationship' => 'none',
-      'override' => array(
-        'button' => 'Override',
-      ),
-    ),
-    'created' => array(
-      'label' => 'Date',
-      'alter' => array(
-        'alter_text' => 0,
-        'text' => '',
-        'make_link' => 0,
-        'path' => '',
-        'link_class' => '',
-        'alt' => '',
-        'prefix' => '',
-        'suffix' => '',
-        'help' => '',
-        'trim' => 0,
-        'max_length' => '',
-        'word_boundary' => 1,
-        'ellipsis' => 1,
-        'strip_tags' => 0,
-        'html' => 0,
-      ),
-      'date_format' => 'custom',
-      'custom_date_format' => 'M j Y',
-      'exclude' => 0,
-      'id' => 'created',
-      'table' => 'node',
-      'field' => 'created',
-      'relationship' => 'none',
-    ),
-    'field_fserver_api_value' => array(
-      'label' => 'Core compatibility',
-      'alter' => array(
-        'alter_text' => 0,
-        'text' => '',
-        'make_link' => 0,
-        'path' => '',
-        'link_class' => '',
-        'alt' => '',
-        'prefix' => '',
-        'suffix' => '',
-        'help' => '',
-        'trim' => 0,
-        'max_length' => '',
-        'word_boundary' => 1,
-        'ellipsis' => 1,
-        'strip_tags' => 0,
-        'html' => 0,
-      ),
-      'link_to_node' => 0,
-      'label_type' => 'widget',
-      'format' => 'default',
-      'multiple' => array(
-        'group' => TRUE,
-        'multiple_number' => '',
-        'multiple_from' => '',
-        'multiple_reversed' => FALSE,
-      ),
-      'exclude' => 1,
-      'id' => 'field_fserver_api_value',
-      'table' => 'node_data_field_fserver_api',
-      'field' => 'field_fserver_api_value',
-      'relationship' => 'none',
-    ),
-  ));
-  $handler->override_option('sorts', array(
-    'release_tag' => array(
-      'order' => 'DESC',
-      'id' => 'release_tag',
-      'table' => 'views',
-      'field' => 'release_tag',
-      'relationship' => 'none',
-      'override' => array(
-        'button' => 'Override',
-      ),
-    ),
-  ));
-  $handler->override_option('arguments', array(
-    'field_fserver_project_nid' => array(
-      'default_action' => 'default',
-      'style_plugin' => 'default_summary',
-      'style_options' => array(),
-      'wildcard' => 'all',
-      'wildcard_substitution' => 'All',
-      'title' => '',
-      'breadcrumb' => '',
-      'default_argument_type' => 'node',
-      'default_argument' => '',
-      'validate_type' => 'none',
-      'validate_fail' => 'not found',
-      'break_phrase' => 0,
-      'not' => 0,
-      'id' => 'field_fserver_project_nid',
-      'table' => 'node_data_field_fserver_project',
-      'field' => 'field_fserver_project_nid',
-      'validate_user_argument_type' => 'uid',
-      'validate_user_roles' => array(
-        '2' => 0,
-      ),
-      'relationship' => 'none',
-      'default_options_div_prefix' => '',
-      'default_argument_user' => 0,
-      'default_argument_fixed' => '',
-      'default_argument_php' => '',
-      'validate_argument_node_type' => array(
-        'fserver_project' => 0,
-        'fserver_release' => 0,
-        'page' => 0,
-        'story' => 0,
-      ),
-      'validate_argument_node_access' => 0,
-      'validate_argument_nid_type' => 'nid',
-      'validate_argument_vocabulary' => array(),
-      'validate_argument_type' => 'tid',
-      'validate_argument_transform' => 0,
-      'validate_user_restrict_roles' => 0,
-      'validate_argument_php' => '',
-      'override' => array(
-        'button' => 'Override',
-      ),
-    ),
-    'field_fserver_api_value' => array(
-      'default_action' => 'ignore',
-      'style_plugin' => 'default_summary',
-      'style_options' => array(),
-      'wildcard' => 'all',
-      'wildcard_substitution' => 'All',
-      'title' => '',
-      'breadcrumb' => '',
-      'default_argument_type' => 'fixed',
-      'default_argument' => '',
-      'validate_type' => 'none',
-      'validate_fail' => 'not found',
-      'add_table' => 0,
-      'require_value' => 0,
-      'reduce_duplicates' => 0,
-      'id' => 'field_fserver_api_value',
-      'table' => 'node_data_field_fserver_api',
-      'field' => 'field_fserver_api_value',
-      'validate_user_argument_type' => 'uid',
-      'validate_user_roles' => array(
-        '2' => 0,
-      ),
-      'override' => array(
-        'button' => 'Override',
-      ),
-      'relationship' => 'none',
-      'default_options_div_prefix' => '',
-      'default_argument_user' => 0,
-      'default_argument_fixed' => '',
-      'default_argument_php' => '',
-      'validate_argument_node_type' => array(
-        'fserver_project' => 0,
-        'fserver_release' => 0,
-        'page' => 0,
-        'story' => 0,
-      ),
-      'validate_argument_node_access' => 0,
-      'validate_argument_nid_type' => 'nid',
-      'validate_argument_vocabulary' => array(),
-      'validate_argument_type' => 'tid',
-      'validate_argument_transform' => 0,
-      'validate_user_restrict_roles' => 0,
-      'validate_argument_php' => '',
-    ),
-  ));
-  $handler->override_option('filters', array(
-    'status' => array(
-      'operator' => '=',
-      'value' => '1',
-      'group' => '0',
-      'exposed' => FALSE,
-      'expose' => array(
-        'operator' => FALSE,
-        'label' => '',
-      ),
-      'id' => 'status',
-      'table' => 'node',
-      'field' => 'status',
-      'relationship' => 'none',
-    ),
-    'type' => array(
-      'operator' => 'in',
-      'value' => array(
-        'fserver_release' => 'fserver_release',
-      ),
-      'group' => '0',
-      'exposed' => FALSE,
-      'expose' => array(
-        'operator' => FALSE,
-        'label' => '',
-      ),
-      'id' => 'type',
-      'table' => 'node',
-      'field' => 'type',
-      'relationship' => 'none',
-    ),
-  ));
-  $handler->override_option('access', array(
-    'type' => 'none',
-  ));
-  $handler->override_option('cache', array(
-    'type' => 'none',
-  ));
-  $handler->override_option('items_per_page', 25);
-  $handler->override_option('use_pager', '1');
-  $handler->override_option('style_plugin', 'table');
-  $handler->override_option('style_options', array(
-    'grouping' => '',
-    'override' => 1,
-    'sticky' => 0,
-    'order' => 'asc',
-    'columns' => array(
-      'title' => 'title',
-      'filesize' => 'field_fserver_file_fid',
-      'field_fserver_file_fid' => 'field_fserver_file_fid',
-      'view_node' => 'view_node',
-      'created' => 'created',
-      'field_fserver_api_value' => 'field_fserver_api_value',
-    ),
-    'info' => array(
-      'title' => array(
-        'sortable' => 0,
-        'separator' => '',
-      ),
-      'filesize' => array(
-        'sortable' => 0,
-        'separator' => '',
-      ),
-      'field_fserver_file_fid' => array(
-        'separator' => '',
-      ),
-      'view_node' => array(
-        'separator' => '',
-      ),
-      'created' => array(
-        'sortable' => 0,
-        'separator' => '',
-      ),
-      'field_fserver_api_value' => array(
-        'sortable' => 0,
-        'separator' => '',
-      ),
-    ),
-    'default' => '-1',
-  ));
-  $handler = $view->new_display('block', 'Recommended releases', 'block_1');
-  $handler->override_option('filters', array(
-    'status' => array(
-      'operator' => '=',
-      'value' => '1',
-      'group' => '0',
-      'exposed' => FALSE,
-      'expose' => array(
-        'operator' => FALSE,
-        'label' => '',
-      ),
-      'id' => 'status',
-      'table' => 'node',
-      'field' => 'status',
-      'relationship' => 'none',
-    ),
-    'type' => array(
-      'operator' => 'in',
-      'value' => array(
-        'fserver_release' => 'fserver_release',
-      ),
-      'group' => '0',
-      'exposed' => FALSE,
-      'expose' => array(
-        'operator' => FALSE,
-        'label' => '',
-      ),
-      'id' => 'type',
-      'table' => 'node',
-      'field' => 'type',
-      'relationship' => 'none',
-    ),
-    'field_fserver_recommended_value_many_to_one' => array(
-      'operator' => 'or',
-      'value' => array(
-        '1' => '1',
-      ),
-      'group' => '0',
-      'exposed' => FALSE,
-      'expose' => array(
-        'operator' => FALSE,
-        'label' => '',
-      ),
-      'id' => 'field_fserver_recommended_value_many_to_one',
-      'table' => 'node_data_field_fserver_recommended',
-      'field' => 'field_fserver_recommended_value_many_to_one',
-      'override' => array(
-        'button' => 'Use default',
-      ),
-      'relationship' => 'none',
-      'reduce_duplicates' => 0,
-    ),
-  ));
-  $handler->override_option('title', 'Releases');
-  $handler->override_option('items_per_page', 0);
-  $handler->override_option('use_pager', '0');
-  $handler->override_option('block_description', '');
-  $handler->override_option('block_caching', -1);
-  $handler = $view->new_display('page', 'All releases', 'page_1');
-  $handler->override_option('arguments', array(
-    'field_fserver_project_nid' => array(
-      'default_action' => 'default',
-      'style_plugin' => 'default_summary',
-      'style_options' => array(),
-      'wildcard' => 'all',
-      'wildcard_substitution' => 'All',
-      'title' => '%1',
-      'breadcrumb' => '',
-      'default_argument_type' => 'node',
-      'default_argument' => '',
-      'validate_type' => 'node',
-      'validate_fail' => 'not found',
-      'break_phrase' => 0,
-      'not' => 0,
-      'id' => 'field_fserver_project_nid',
-      'table' => 'node_data_field_fserver_project',
-      'field' => 'field_fserver_project_nid',
-      'validate_user_argument_type' => 'uid',
-      'validate_user_roles' => array(
-        '2' => 0,
-      ),
-      'relationship' => 'none',
-      'default_options_div_prefix' => '',
-      'default_argument_user' => 0,
-      'default_argument_fixed' => '',
-      'default_argument_php' => '',
-      'validate_argument_node_type' => array(
-        'fserver_distro' => 'fserver_distro',
-        'fserver_project' => 'fserver_project',
-        'fserver_release' => 0,
-        'page' => 0,
-        'story' => 0,
-      ),
-      'validate_argument_node_access' => 0,
-      'validate_argument_nid_type' => 'nid',
-      'validate_argument_vocabulary' => array(),
-      'validate_argument_type' => 'tid',
-      'validate_argument_transform' => 0,
-      'validate_user_restrict_roles' => 0,
-      'validate_argument_php' => '',
-      'override' => array(
-        'button' => 'Use default',
-      ),
-    ),
-  ));
-  $handler->override_option('path', 'node/%/releases');
-  $handler->override_option('menu', array(
-    'type' => 'tab',
-    'title' => 'All releases',
-    'description' => '',
-    'weight' => '0',
-    'name' => 'navigation',
-  ));
-  $handler->override_option('tab_options', array(
-    'type' => 'none',
-    'title' => '',
-    'description' => '',
-    'weight' => 0,
-    'name' => 'navigation',
-  ));
 
-  $views[$view->name] = $view;
+  /* Display: Master */
+  $handler = $view->new_display('default', 'Master', 'default');
+  $handler->display->display_options['title'] = 'All Releases';
+  $handler->display->display_options['access']['type'] = 'perm';
+  $handler->display->display_options['cache']['type'] = 'none';
+  $handler->display->display_options['query']['type'] = 'views_query';
+  $handler->display->display_options['query']['options']['query_comment'] = FALSE;
+  $handler->display->display_options['exposed_form']['type'] = 'basic';
+  $handler->display->display_options['pager']['type'] = 'full';
+  $handler->display->display_options['pager']['options']['items_per_page'] = '25';
+  $handler->display->display_options['style_plugin'] = 'table';
+  /* Relationship: File Usage: File */
+  $handler->display->display_options['relationships']['node_to_file']['id'] = 'node_to_file';
+  $handler->display->display_options['relationships']['node_to_file']['table'] = 'file_usage';
+  $handler->display->display_options['relationships']['node_to_file']['field'] = 'node_to_file';
+  $handler->display->display_options['relationships']['node_to_file']['required'] = 1;
+  /* Field: Content: Title */
+  $handler->display->display_options['fields']['title']['id'] = 'title';
+  $handler->display->display_options['fields']['title']['table'] = 'node';
+  $handler->display->display_options['fields']['title']['field'] = 'title';
+  $handler->display->display_options['fields']['title']['label'] = 'Release';
+  $handler->display->display_options['fields']['title']['alter']['alter_text'] = 0;
+  $handler->display->display_options['fields']['title']['alter']['make_link'] = 0;
+  $handler->display->display_options['fields']['title']['alter']['absolute'] = 0;
+  $handler->display->display_options['fields']['title']['alter']['external'] = 0;
+  $handler->display->display_options['fields']['title']['alter']['replace_spaces'] = 0;
+  $handler->display->display_options['fields']['title']['alter']['trim_whitespace'] = 0;
+  $handler->display->display_options['fields']['title']['alter']['nl2br'] = 0;
+  $handler->display->display_options['fields']['title']['alter']['word_boundary'] = 0;
+  $handler->display->display_options['fields']['title']['alter']['ellipsis'] = 0;
+  $handler->display->display_options['fields']['title']['alter']['strip_tags'] = 0;
+  $handler->display->display_options['fields']['title']['alter']['trim'] = 0;
+  $handler->display->display_options['fields']['title']['alter']['html'] = 0;
+  $handler->display->display_options['fields']['title']['element_label_colon'] = 1;
+  $handler->display->display_options['fields']['title']['element_default_classes'] = 1;
+  $handler->display->display_options['fields']['title']['hide_empty'] = 0;
+  $handler->display->display_options['fields']['title']['empty_zero'] = 0;
+  $handler->display->display_options['fields']['title']['hide_alter_empty'] = 0;
+  $handler->display->display_options['fields']['title']['link_to_node'] = 1;
+  /* Field: File: Size */
+  $handler->display->display_options['fields']['filesize']['id'] = 'filesize';
+  $handler->display->display_options['fields']['filesize']['table'] = 'file_managed';
+  $handler->display->display_options['fields']['filesize']['field'] = 'filesize';
+  $handler->display->display_options['fields']['filesize']['relationship'] = 'node_to_file';
+  $handler->display->display_options['fields']['filesize']['label'] = '';
+  $handler->display->display_options['fields']['filesize']['exclude'] = TRUE;
+  $handler->display->display_options['fields']['filesize']['alter']['alter_text'] = 0;
+  $handler->display->display_options['fields']['filesize']['alter']['make_link'] = 0;
+  $handler->display->display_options['fields']['filesize']['alter']['absolute'] = 0;
+  $handler->display->display_options['fields']['filesize']['alter']['external'] = 0;
+  $handler->display->display_options['fields']['filesize']['alter']['replace_spaces'] = 0;
+  $handler->display->display_options['fields']['filesize']['alter']['trim_whitespace'] = 0;
+  $handler->display->display_options['fields']['filesize']['alter']['nl2br'] = 0;
+  $handler->display->display_options['fields']['filesize']['alter']['word_boundary'] = 1;
+  $handler->display->display_options['fields']['filesize']['alter']['ellipsis'] = 1;
+  $handler->display->display_options['fields']['filesize']['alter']['strip_tags'] = 0;
+  $handler->display->display_options['fields']['filesize']['alter']['trim'] = 0;
+  $handler->display->display_options['fields']['filesize']['alter']['html'] = 0;
+  $handler->display->display_options['fields']['filesize']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['filesize']['element_default_classes'] = 1;
+  $handler->display->display_options['fields']['filesize']['hide_empty'] = 0;
+  $handler->display->display_options['fields']['filesize']['empty_zero'] = 0;
+  $handler->display->display_options['fields']['filesize']['hide_alter_empty'] = 0;
+  /* Field: Content: Package */
+  $handler->display->display_options['fields']['field_fserver_file']['id'] = 'field_fserver_file';
+  $handler->display->display_options['fields']['field_fserver_file']['table'] = 'field_data_field_fserver_file';
+  $handler->display->display_options['fields']['field_fserver_file']['field'] = 'field_fserver_file';
+  $handler->display->display_options['fields']['field_fserver_file']['alter']['alter_text'] = 1;
+  $handler->display->display_options['fields']['field_fserver_file']['alter']['text'] = '<a href=\'[field_fserver_file]\'>Download</a> ([filesize])';
+  $handler->display->display_options['fields']['field_fserver_file']['alter']['make_link'] = 0;
+  $handler->display->display_options['fields']['field_fserver_file']['alter']['absolute'] = 0;
+  $handler->display->display_options['fields']['field_fserver_file']['alter']['external'] = 0;
+  $handler->display->display_options['fields']['field_fserver_file']['alter']['replace_spaces'] = 0;
+  $handler->display->display_options['fields']['field_fserver_file']['alter']['trim_whitespace'] = 0;
+  $handler->display->display_options['fields']['field_fserver_file']['alter']['nl2br'] = 0;
+  $handler->display->display_options['fields']['field_fserver_file']['alter']['word_boundary'] = 1;
+  $handler->display->display_options['fields']['field_fserver_file']['alter']['ellipsis'] = 1;
+  $handler->display->display_options['fields']['field_fserver_file']['alter']['strip_tags'] = 0;
+  $handler->display->display_options['fields']['field_fserver_file']['alter']['trim'] = 0;
+  $handler->display->display_options['fields']['field_fserver_file']['alter']['html'] = 0;
+  $handler->display->display_options['fields']['field_fserver_file']['element_label_colon'] = 1;
+  $handler->display->display_options['fields']['field_fserver_file']['element_default_classes'] = 1;
+  $handler->display->display_options['fields']['field_fserver_file']['hide_empty'] = 0;
+  $handler->display->display_options['fields']['field_fserver_file']['empty_zero'] = 0;
+  $handler->display->display_options['fields']['field_fserver_file']['hide_alter_empty'] = 0;
+  $handler->display->display_options['fields']['field_fserver_file']['click_sort_column'] = 'fid';
+  $handler->display->display_options['fields']['field_fserver_file']['type'] = 'file_url_plain';
+  $handler->display->display_options['fields']['field_fserver_file']['field_api_classes'] = 0;
+  /* Field: Content: Link */
+  $handler->display->display_options['fields']['view_node']['id'] = 'view_node';
+  $handler->display->display_options['fields']['view_node']['table'] = 'node';
+  $handler->display->display_options['fields']['view_node']['field'] = 'view_node';
+  $handler->display->display_options['fields']['view_node']['label'] = '';
+  $handler->display->display_options['fields']['view_node']['alter']['alter_text'] = 0;
+  $handler->display->display_options['fields']['view_node']['alter']['make_link'] = 0;
+  $handler->display->display_options['fields']['view_node']['alter']['absolute'] = 0;
+  $handler->display->display_options['fields']['view_node']['alter']['external'] = 0;
+  $handler->display->display_options['fields']['view_node']['alter']['replace_spaces'] = 0;
+  $handler->display->display_options['fields']['view_node']['alter']['trim_whitespace'] = 0;
+  $handler->display->display_options['fields']['view_node']['alter']['nl2br'] = 0;
+  $handler->display->display_options['fields']['view_node']['alter']['word_boundary'] = 1;
+  $handler->display->display_options['fields']['view_node']['alter']['ellipsis'] = 1;
+  $handler->display->display_options['fields']['view_node']['alter']['strip_tags'] = 0;
+  $handler->display->display_options['fields']['view_node']['alter']['trim'] = 0;
+  $handler->display->display_options['fields']['view_node']['alter']['html'] = 0;
+  $handler->display->display_options['fields']['view_node']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['view_node']['element_default_classes'] = 1;
+  $handler->display->display_options['fields']['view_node']['hide_empty'] = 0;
+  $handler->display->display_options['fields']['view_node']['empty_zero'] = 0;
+  $handler->display->display_options['fields']['view_node']['hide_alter_empty'] = 0;
+  $handler->display->display_options['fields']['view_node']['text'] = 'Release notes';
+  /* Field: Content: Post date */
+  $handler->display->display_options['fields']['created']['id'] = 'created';
+  $handler->display->display_options['fields']['created']['table'] = 'node';
+  $handler->display->display_options['fields']['created']['field'] = 'created';
+  $handler->display->display_options['fields']['created']['label'] = 'Date';
+  $handler->display->display_options['fields']['created']['alter']['alter_text'] = 0;
+  $handler->display->display_options['fields']['created']['alter']['make_link'] = 0;
+  $handler->display->display_options['fields']['created']['alter']['absolute'] = 0;
+  $handler->display->display_options['fields']['created']['alter']['external'] = 0;
+  $handler->display->display_options['fields']['created']['alter']['replace_spaces'] = 0;
+  $handler->display->display_options['fields']['created']['alter']['trim_whitespace'] = 0;
+  $handler->display->display_options['fields']['created']['alter']['nl2br'] = 0;
+  $handler->display->display_options['fields']['created']['alter']['word_boundary'] = 1;
+  $handler->display->display_options['fields']['created']['alter']['ellipsis'] = 1;
+  $handler->display->display_options['fields']['created']['alter']['strip_tags'] = 0;
+  $handler->display->display_options['fields']['created']['alter']['trim'] = 0;
+  $handler->display->display_options['fields']['created']['alter']['html'] = 0;
+  $handler->display->display_options['fields']['created']['element_label_colon'] = 1;
+  $handler->display->display_options['fields']['created']['element_default_classes'] = 1;
+  $handler->display->display_options['fields']['created']['hide_empty'] = 0;
+  $handler->display->display_options['fields']['created']['empty_zero'] = 0;
+  $handler->display->display_options['fields']['created']['hide_alter_empty'] = 0;
+  $handler->display->display_options['fields']['created']['date_format'] = 'custom';
+  $handler->display->display_options['fields']['created']['custom_date_format'] = 'M j Y';
+  /* Contextual filter: Content: Project (field_fserver_project) */
+  $handler->display->display_options['arguments']['field_fserver_project_nid']['id'] = 'field_fserver_project_nid';
+  $handler->display->display_options['arguments']['field_fserver_project_nid']['table'] = 'field_data_field_fserver_project';
+  $handler->display->display_options['arguments']['field_fserver_project_nid']['field'] = 'field_fserver_project_nid';
+  $handler->display->display_options['arguments']['field_fserver_project_nid']['default_action'] = 'default';
+  $handler->display->display_options['arguments']['field_fserver_project_nid']['default_argument_type'] = 'node';
+  $handler->display->display_options['arguments']['field_fserver_project_nid']['default_argument_skip_url'] = 0;
+  $handler->display->display_options['arguments']['field_fserver_project_nid']['summary']['number_of_records'] = '0';
+  $handler->display->display_options['arguments']['field_fserver_project_nid']['summary']['format'] = 'default_summary';
+  $handler->display->display_options['arguments']['field_fserver_project_nid']['summary_options']['items_per_page'] = '25';
+  $handler->display->display_options['arguments']['field_fserver_project_nid']['specify_validation'] = 1;
+  $handler->display->display_options['arguments']['field_fserver_project_nid']['validate']['type'] = 'node';
+  $handler->display->display_options['arguments']['field_fserver_project_nid']['validate_options']['types'] = array(
+    'fserver_distro' => 'fserver_distro',
+    'fserver_project' => 'fserver_project',
+  );
+  $handler->display->display_options['arguments']['field_fserver_project_nid']['validate_options']['access'] = 0;
+  $handler->display->display_options['arguments']['field_fserver_project_nid']['break_phrase'] = 0;
+  $handler->display->display_options['arguments']['field_fserver_project_nid']['not'] = 0;
+  /* Contextual filter: Content: Core compatibility (field_fserver_api) */
+  $handler->display->display_options['arguments']['field_fserver_api_value']['id'] = 'field_fserver_api_value';
+  $handler->display->display_options['arguments']['field_fserver_api_value']['table'] = 'field_data_field_fserver_api';
+  $handler->display->display_options['arguments']['field_fserver_api_value']['field'] = 'field_fserver_api_value';
+  $handler->display->display_options['arguments']['field_fserver_api_value']['default_argument_type'] = 'fixed';
+  $handler->display->display_options['arguments']['field_fserver_api_value']['default_argument_skip_url'] = 0;
+  $handler->display->display_options['arguments']['field_fserver_api_value']['summary']['number_of_records'] = '0';
+  $handler->display->display_options['arguments']['field_fserver_api_value']['summary']['format'] = 'default_summary';
+  $handler->display->display_options['arguments']['field_fserver_api_value']['summary_options']['items_per_page'] = '25';
+  $handler->display->display_options['arguments']['field_fserver_api_value']['glossary'] = 0;
+  $handler->display->display_options['arguments']['field_fserver_api_value']['limit'] = '0';
+  $handler->display->display_options['arguments']['field_fserver_api_value']['transform_dash'] = 0;
+  $handler->display->display_options['arguments']['field_fserver_api_value']['break_phrase'] = 0;
+  /* Filter criterion: Content: Published */
+  $handler->display->display_options['filters']['status']['id'] = 'status';
+  $handler->display->display_options['filters']['status']['table'] = 'node';
+  $handler->display->display_options['filters']['status']['field'] = 'status';
+  $handler->display->display_options['filters']['status']['value'] = 1;
+  $handler->display->display_options['filters']['status']['group'] = 0;
+  $handler->display->display_options['filters']['status']['expose']['operator'] = FALSE;
+  /* Filter criterion: Content: Type */
+  $handler->display->display_options['filters']['type']['id'] = 'type';
+  $handler->display->display_options['filters']['type']['table'] = 'node';
+  $handler->display->display_options['filters']['type']['field'] = 'type';
+  $handler->display->display_options['filters']['type']['value'] = array(
+    'fserver_release' => 'fserver_release',
+  );
 
-  // Exported view: fserver_updates
+  /* Display: Page */
+  $handler = $view->new_display('page', 'Page', 'page');
+  $handler->display->display_options['path'] = 'node/%/releases';
+  $handler->display->display_options['menu']['type'] = 'tab';
+  $handler->display->display_options['menu']['title'] = 'All Releases';
+  $handler->display->display_options['menu']['weight'] = '0';
+
+  /* Display: Block */
+  $handler = $view->new_display('block', 'Block', 'block');
+  $handler->display->display_options['defaults']['title'] = FALSE;
+  $handler->display->display_options['title'] = 'Recommended Releases';
+  $handler->display->display_options['defaults']['pager'] = FALSE;
+  $handler->display->display_options['pager']['type'] = 'full';
+  $handler->display->display_options['pager']['options']['items_per_page'] = '5';
+  $export['fserver_releases'] = $view;
+
   $view = new view;
   $view->name = 'fserver_updates';
-  $view->description = 'Feature Server > Update feed';
-  $view->tag = 'fserver';
-  $view->view_php = '';
+  $view->description = '';
+  $view->tag = 'default';
   $view->base_table = 'node';
-  $view->is_cacheable = FALSE;
-  $view->api_version = 2;
+  $view->human_name = 'Updates';
+  $view->core = 7;
+  $view->api_version = '3.0-alpha1';
   $view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
-  $handler = $view->new_display('default', 'Defaults', 'default');
-  $handler->override_option('relationships', array(
-    'field_fserver_project_nid' => array(
-      'label' => 'Project',
-      'required' => 1,
-      'delta' => -1,
-      'id' => 'field_fserver_project_nid',
-      'table' => 'node_data_field_fserver_project',
-      'field' => 'field_fserver_project_nid',
-      'relationship' => 'none',
-    ),
-    'field_fserver_file_fid' => array(
-      'label' => 'Package',
-      'required' => 1,
-      'delta' => -1,
-      'id' => 'field_fserver_file_fid',
-      'table' => 'node_data_field_fserver_file',
-      'field' => 'field_fserver_file_fid',
-      'relationship' => 'none',
-    ),
-  ));
-  $handler->override_option('fields', array(
-    'field_fserver_api_value' => array(
-      'label' => 'API version',
-      'alter' => array(
-        'alter_text' => 0,
-        'text' => '',
-        'make_link' => 0,
-        'path' => '',
-        'link_class' => '',
-        'alt' => '',
-        'prefix' => '',
-        'suffix' => '',
-        'help' => '',
-        'trim' => 0,
-        'max_length' => '',
-        'word_boundary' => 1,
-        'ellipsis' => 1,
-        'strip_tags' => 0,
-        'html' => 0,
-      ),
-      'link_to_node' => 0,
-      'label_type' => 'custom',
-      'format' => 'default',
-      'multiple' => array(
-        'group' => TRUE,
-        'multiple_number' => '',
-        'multiple_from' => '',
-        'multiple_reversed' => FALSE,
-      ),
-      'exclude' => 0,
-      'id' => 'field_fserver_api_value',
-      'table' => 'node_data_field_fserver_api',
-      'field' => 'field_fserver_api_value',
-      'relationship' => 'none',
-    ),
-    'field_fserver_versionextra_value' => array(
-      'label' => 'Extra version',
-      'alter' => array(
-        'alter_text' => 0,
-        'text' => '',
-        'make_link' => 0,
-        'path' => '',
-        'link_class' => '',
-        'alt' => '',
-        'prefix' => '',
-        'suffix' => '',
-        'help' => '',
-        'trim' => 0,
-        'max_length' => '',
-        'word_boundary' => 1,
-        'ellipsis' => 1,
-        'strip_tags' => 0,
-        'html' => 0,
-      ),
-      'link_to_node' => 0,
-      'label_type' => 'widget',
-      'format' => 'default',
-      'multiple' => array(
-        'group' => TRUE,
-        'multiple_number' => '',
-        'multiple_from' => '',
-        'multiple_reversed' => FALSE,
-      ),
-      'exclude' => 0,
-      'id' => 'field_fserver_versionextra_value',
-      'table' => 'node_data_field_fserver_versionextra',
-      'field' => 'field_fserver_versionextra_value',
-      'relationship' => 'none',
-    ),
-    'field_fserver_versionmajor_value' => array(
-      'label' => 'Major version',
-      'alter' => array(
-        'alter_text' => 0,
-        'text' => '',
-        'make_link' => 0,
-        'path' => '',
-        'link_class' => '',
-        'alt' => '',
-        'prefix' => '',
-        'suffix' => '',
-        'help' => '',
-        'trim' => 0,
-        'max_length' => '',
-        'word_boundary' => 1,
-        'ellipsis' => 1,
-        'strip_tags' => 0,
-        'html' => 0,
-      ),
-      'link_to_node' => 0,
-      'label_type' => 'widget',
-      'format' => 'default',
-      'multiple' => array(
-        'group' => TRUE,
-        'multiple_number' => '',
-        'multiple_from' => '',
-        'multiple_reversed' => FALSE,
-      ),
-      'exclude' => 0,
-      'id' => 'field_fserver_versionmajor_value',
-      'table' => 'node_data_field_fserver_versionmajor',
-      'field' => 'field_fserver_versionmajor_value',
-      'relationship' => 'none',
-    ),
-    'field_fserver_versionpatch_value' => array(
-      'label' => 'Patch version',
-      'alter' => array(
-        'alter_text' => 0,
-        'text' => '',
-        'make_link' => 0,
-        'path' => '',
-        'link_class' => '',
-        'alt' => '',
-        'prefix' => '',
-        'suffix' => '',
-        'help' => '',
-        'trim' => 0,
-        'max_length' => '',
-        'word_boundary' => 1,
-        'ellipsis' => 1,
-        'strip_tags' => 0,
-        'html' => 0,
-      ),
-      'link_to_node' => 0,
-      'label_type' => 'widget',
-      'format' => 'default',
-      'multiple' => array(
-        'group' => TRUE,
-        'multiple_number' => '',
-        'multiple_from' => '',
-        'multiple_reversed' => FALSE,
-      ),
-      'exclude' => 0,
-      'id' => 'field_fserver_versionpatch_value',
-      'table' => 'node_data_field_fserver_versionpatch',
-      'field' => 'field_fserver_versionpatch_value',
-      'relationship' => 'none',
-    ),
-    'created' => array(
-      'label' => 'Post date',
-      'alter' => array(
-        'alter_text' => 0,
-        'text' => '',
-        'make_link' => 0,
-        'path' => '',
-        'link_class' => '',
-        'alt' => '',
-        'prefix' => '',
-        'suffix' => '',
-        'help' => '',
-        'trim' => 0,
-        'max_length' => '',
-        'word_boundary' => 1,
-        'ellipsis' => 1,
-        'strip_tags' => 0,
-        'html' => 0,
-      ),
-      'date_format' => 'custom',
-      'custom_date_format' => 'U',
-      'exclude' => 0,
-      'id' => 'created',
-      'table' => 'node',
-      'field' => 'created',
-      'relationship' => 'none',
-    ),
-    'title' => array(
-      'label' => 'Project title',
-      'alter' => array(
-        'alter_text' => 0,
-        'text' => '',
-        'make_link' => 0,
-        'path' => '',
-        'link_class' => '',
-        'alt' => '',
-        'prefix' => '',
-        'suffix' => '',
-        'help' => '',
-        'trim' => 0,
-        'max_length' => '',
-        'word_boundary' => 1,
-        'ellipsis' => 1,
-        'strip_tags' => 0,
-        'html' => 0,
-      ),
-      'link_to_node' => 0,
-      'exclude' => 0,
-      'id' => 'title',
-      'table' => 'node',
-      'field' => 'title',
-      'relationship' => 'field_fserver_project_nid',
-    ),
-    'field_fserver_name_value' => array(
-      'label' => 'Project name',
-      'alter' => array(
-        'alter_text' => 0,
-        'text' => '',
-        'make_link' => 0,
-        'path' => '',
-        'link_class' => '',
-        'alt' => '',
-        'prefix' => '',
-        'suffix' => '',
-        'help' => '',
-        'trim' => 0,
-        'max_length' => '',
-        'word_boundary' => 1,
-        'ellipsis' => 1,
-        'strip_tags' => 0,
-        'html' => 0,
-      ),
-      'link_to_node' => 0,
-      'label_type' => 'widget',
-      'format' => 'default',
-      'multiple' => array(
-        'group' => TRUE,
-        'multiple_number' => '',
-        'multiple_from' => '',
-        'multiple_reversed' => FALSE,
-      ),
-      'exclude' => 0,
-      'id' => 'field_fserver_name_value',
-      'table' => 'node_data_field_fserver_name',
-      'field' => 'field_fserver_name_value',
-      'relationship' => 'field_fserver_project_nid',
-    ),
-    'nid' => array(
-      'label' => 'Project URL',
-      'alter' => array(
-        'alter_text' => 1,
-        'text' => 'node/[nid]',
-        'make_link' => 0,
-        'path' => '',
-        'link_class' => '',
-        'alt' => '',
-        'prefix' => '',
-        'suffix' => '',
-        'help' => '',
-        'trim' => 0,
-        'max_length' => '',
-        'word_boundary' => 1,
-        'ellipsis' => 1,
-        'strip_tags' => 0,
-        'html' => 0,
-      ),
-      'link_to_node' => 0,
-      'exclude' => 0,
-      'id' => 'nid',
-      'table' => 'node',
-      'field' => 'nid',
-      'relationship' => 'field_fserver_project_nid',
-    ),
-    'filepath' => array(
-      'label' => 'File path',
-      'alter' => array(
-        'alter_text' => 0,
-        'text' => '',
-        'make_link' => 0,
-        'path' => '',
-        'link_class' => '',
-        'alt' => '',
-        'prefix' => '',
-        'suffix' => '',
-        'help' => '',
-        'trim' => 0,
-        'max_length' => '',
-        'word_boundary' => 1,
-        'ellipsis' => 1,
-        'strip_tags' => 0,
-        'html' => 0,
-      ),
-      'link_to_file' => 0,
-      'exclude' => 0,
-      'id' => 'filepath',
-      'table' => 'files',
-      'field' => 'filepath',
-      'relationship' => 'field_fserver_file_fid',
-    ),
-    'filesize' => array(
-      'label' => 'Filesize',
-      'alter' => array(
-        'alter_text' => 0,
-        'text' => '',
-        'make_link' => 0,
-        'path' => '',
-        'link_class' => '',
-        'alt' => '',
-        'prefix' => '',
-        'suffix' => '',
-        'help' => '',
-        'trim' => 0,
-        'max_length' => '',
-        'word_boundary' => 1,
-        'ellipsis' => 1,
-        'strip_tags' => 0,
-        'html' => 0,
-      ),
-      'file_size_display' => 'bytes',
-      'exclude' => 0,
-      'id' => 'filesize',
-      'table' => 'files',
-      'field' => 'filesize',
-      'relationship' => 'field_fserver_file_fid',
-    ),
-    'nid_1' => array(
-      'label' => 'Release URL',
-      'alter' => array(
-        'alter_text' => 1,
-        'text' => 'node/[nid_1]',
-        'make_link' => 0,
-        'path' => '',
-        'link_class' => '',
-        'alt' => '',
-        'prefix' => '',
-        'suffix' => '',
-        'help' => '',
-        'trim' => 0,
-        'max_length' => '',
-        'word_boundary' => 1,
-        'ellipsis' => 1,
-        'strip_tags' => 0,
-        'html' => 0,
-      ),
-      'link_to_node' => 0,
-      'exclude' => 0,
-      'id' => 'nid_1',
-      'table' => 'node',
-      'field' => 'nid',
-      'relationship' => 'none',
-    ),
-    'mdhash' => array(
-      'label' => 'MD5 hash',
-      'alter' => array(
-        'alter_text' => FALSE,
-        'text' => '',
-        'make_link' => FALSE,
-        'path' => '',
-        'alt' => '',
-        'link_class' => '',
-        'prefix' => '',
-        'suffix' => '',
-        'trim' => FALSE,
-        'max_length' => '',
-        'word_boundary' => TRUE,
-        'ellipsis' => TRUE,
-        'strip_tags' => FALSE,
-        'html' => FALSE,
-      ),
-      'exclude' => 0,
-      'id' => 'mdhash',
-      'table' => 'files',
-      'field' => 'mdhash',
-      'relationship' => 'field_fserver_file_fid',
-    ),
-    'field_fserver_security_value' => array(
-      'label' => 'Security release',
-      'alter' => array(
-        'alter_text' => 0,
-        'text' => '',
-        'make_link' => 0,
-        'path' => '',
-        'link_class' => '',
-        'alt' => '',
-        'prefix' => '',
-        'suffix' => '',
-        'help' => '',
-        'trim' => 0,
-        'max_length' => '',
-        'word_boundary' => 1,
-        'ellipsis' => 1,
-        'strip_tags' => 0,
-        'html' => 0,
-      ),
-      'link_to_node' => 0,
-      'label_type' => 'widget',
-      'format' => 'default',
-      'multiple' => array(
-        'group' => TRUE,
-        'multiple_number' => '',
-        'multiple_from' => '',
-        'multiple_reversed' => FALSE,
-      ),
-      'exclude' => 0,
-      'id' => 'field_fserver_security_value',
-      'table' => 'node_data_field_fserver_security',
-      'field' => 'field_fserver_security_value',
-      'relationship' => 'none',
-    ),
-    'field_fserver_recommended_value' => array(
-      'label' => 'Recommended',
-      'alter' => array(
-        'alter_text' => 0,
-        'text' => '',
-        'make_link' => 0,
-        'path' => '',
-        'link_class' => '',
-        'alt' => '',
-        'prefix' => '',
-        'suffix' => '',
-        'help' => '',
-        'trim' => 0,
-        'max_length' => '',
-        'word_boundary' => 1,
-        'ellipsis' => 1,
-        'strip_tags' => 0,
-        'html' => 0,
-      ),
-      'link_to_node' => 0,
-      'label_type' => 'widget',
-      'format' => 'default',
-      'multiple' => array(
-        'group' => TRUE,
-        'multiple_number' => '',
-        'multiple_from' => '',
-        'multiple_reversed' => FALSE,
-      ),
-      'exclude' => 0,
-      'id' => 'field_fserver_recommended_value',
-      'table' => 'node_data_field_fserver_recommended',
-      'field' => 'field_fserver_recommended_value',
-      'relationship' => 'none',
-    ),
-    'field_fserver_type_value' => array(
-      'label' => 'Type',
-      'alter' => array(
-        'alter_text' => 0,
-        'text' => '',
-        'make_link' => 0,
-        'path' => '',
-        'link_class' => '',
-        'alt' => '',
-        'prefix' => '',
-        'suffix' => '',
-        'help' => '',
-        'trim' => 0,
-        'max_length' => '',
-        'word_boundary' => 1,
-        'ellipsis' => 1,
-        'strip_tags' => 0,
-        'html' => 0,
-      ),
-      'link_to_node' => 0,
-      'label_type' => 'widget',
-      'format' => 'plain',
-      'multiple' => array(
-        'group' => TRUE,
-        'multiple_number' => '',
-        'multiple_from' => '',
-        'multiple_reversed' => FALSE,
-      ),
-      'exclude' => 0,
-      'id' => 'field_fserver_type_value',
-      'table' => 'node_data_field_fserver_type',
-      'field' => 'field_fserver_type_value',
-      'relationship' => 'field_fserver_project_nid',
-    ),
-    'field_fserver_redirect_value' => array(
-      'label' => 'Type',
-      'alter' => array(
-        'alter_text' => 0,
-        'text' => '',
-        'make_link' => 0,
-        'path' => '',
-        'link_class' => '',
-        'alt' => '',
-        'prefix' => '',
-        'suffix' => '',
-        'help' => '',
-        'trim' => 0,
-        'max_length' => '',
-        'word_boundary' => 1,
-        'ellipsis' => 1,
-        'strip_tags' => 0,
-        'html' => 0,
-      ),
-      'link_to_node' => 0,
-      'label_type' => 'widget',
-      'format' => 'plain',
-      'multiple' => array(
-        'group' => TRUE,
-        'multiple_number' => '',
-        'multiple_from' => '',
-        'multiple_reversed' => FALSE,
-      ),
-      'exclude' => 0,
-      'id' => 'field_fserver_redirect_value',
-      'table' => 'node_data_field_fserver_redirect',
-      'field' => 'field_fserver_redirect_value',
-      'relationship' => 'field_fserver_project_nid',
-    ),
-    'field_fserver_method_value' => array(
-      'label' => 'Packaging method',
-      'alter' => array(
-        'alter_text' => 0,
-        'text' => '',
-        'make_link' => 0,
-        'path' => '',
-        'link_class' => '',
-        'alt' => '',
-        'prefix' => '',
-        'suffix' => '',
-        'target' => '',
-        'help' => '',
-        'trim' => 0,
-        'max_length' => '',
-        'word_boundary' => 1,
-        'ellipsis' => 1,
-        'html' => 0,
-        'strip_tags' => 0,
-      ),
-      'empty' => '',
-      'hide_empty' => 0,
-      'empty_zero' => 0,
-      'link_to_node' => 0,
-      'label_type' => 'widget',
-      'format' => 'default',
-      'multiple' => array(
-        'group' => TRUE,
-        'multiple_number' => '',
-        'multiple_from' => '',
-        'multiple_reversed' => FALSE,
-      ),
-      'exclude' => 0,
-      'id' => 'field_fserver_method_value',
-      'table' => 'node_data_field_fserver_method',
-      'field' => 'field_fserver_method_value',
-      'relationship' => 'field_fserver_project_nid',
-    ),
-    'field_fserver_repository_value' => array(
-      'label' => 'Repository URL',
-      'alter' => array(
-        'alter_text' => 0,
-        'text' => '',
-        'make_link' => 0,
-        'path' => '',
-        'link_class' => '',
-        'alt' => '',
-        'prefix' => '',
-        'suffix' => '',
-        'target' => '',
-        'help' => '',
-        'trim' => 0,
-        'max_length' => '',
-        'word_boundary' => 1,
-        'ellipsis' => 1,
-        'html' => 0,
-        'strip_tags' => 0,
-      ),
-      'empty' => '',
-      'hide_empty' => 0,
-      'empty_zero' => 0,
-      'link_to_node' => 0,
-      'label_type' => 'widget',
-      'format' => 'default',
-      'multiple' => array(
-        'group' => TRUE,
-        'multiple_number' => '',
-        'multiple_from' => '',
-        'multiple_reversed' => FALSE,
-      ),
-      'exclude' => 0,
-      'id' => 'field_fserver_repository_value',
-      'table' => 'node_data_field_fserver_repository',
-      'field' => 'field_fserver_repository_value',
-      'relationship' => 'field_fserver_project_nid',
-    ),
-  ));
-  $handler->override_option('sorts', array(
-    'release_tag' => array(
-      'order' => 'DESC',
-      'id' => 'release_tag',
-      'table' => 'views',
-      'field' => 'release_tag',
-      'relationship' => 'none',
-    ),
-    'status' => array(
-      'order' => 'DESC',
-      'id' => 'status',
-      'table' => 'node',
-      'field' => 'status',
-      'override' => array(
-        'button' => 'Override',
-      ),
-      'relationship' => 'none',
-    ),
-  ));
-  $handler->override_option('arguments', array(
-    'field_fserver_name_value' => array(
-      'default_action' => 'not found',
-      'style_plugin' => 'default_summary',
-      'style_options' => array(),
-      'wildcard' => 'all',
-      'wildcard_substitution' => 'All',
-      'title' => '',
-      'breadcrumb' => '',
-      'default_argument_type' => 'fixed',
-      'default_argument' => '',
-      'validate_type' => 'none',
-      'validate_fail' => 'not found',
-      'glossary' => 0,
-      'limit' => '0',
-      'case' => 'none',
-      'path_case' => 'none',
-      'transform_dash' => 0,
-      'id' => 'field_fserver_name_value',
-      'table' => 'node_data_field_fserver_name',
-      'field' => 'field_fserver_name_value',
-      'validate_user_argument_type' => 'uid',
-      'validate_user_roles' => array(
-        '2' => 0,
-      ),
-      'relationship' => 'field_fserver_project_nid',
-      'default_options_div_prefix' => '',
-      'default_argument_user' => 0,
-      'default_argument_fixed' => '',
-      'default_argument_php' => '',
-      'validate_argument_node_type' => array(
-        'fserver_project' => 0,
-        'fserver_release' => 0,
-        'image' => 0,
-      ),
-      'validate_argument_node_access' => 0,
-      'validate_argument_nid_type' => 'nid',
-      'validate_argument_vocabulary' => array(),
-      'validate_argument_type' => 'tid',
-      'validate_argument_transform' => 0,
-      'validate_user_restrict_roles' => 0,
-      'validate_argument_php' => '',
-    ),
-    'field_fserver_api_value' => array(
-      'default_action' => 'not found',
-      'style_plugin' => 'default_summary',
-      'style_options' => array(),
-      'wildcard' => 'all',
-      'wildcard_substitution' => 'All',
-      'title' => '',
-      'breadcrumb' => '',
-      'default_argument_type' => 'fixed',
-      'default_argument' => '',
-      'validate_type' => 'none',
-      'validate_fail' => 'not found',
-      'add_table' => 0,
-      'require_value' => 0,
-      'reduce_duplicates' => 0,
-      'id' => 'field_fserver_api_value',
-      'table' => 'node_data_field_fserver_api',
-      'field' => 'field_fserver_api_value',
-      'validate_user_argument_type' => 'uid',
-      'validate_user_roles' => array(
-        '2' => 0,
-      ),
-      'relationship' => 'none',
-      'default_options_div_prefix' => '',
-      'default_argument_user' => 0,
-      'default_argument_fixed' => '',
-      'default_argument_php' => '',
-      'validate_argument_node_type' => array(
-        'fserver_project' => 0,
-        'fserver_release' => 0,
-        'image' => 0,
-      ),
-      'validate_argument_node_access' => 0,
-      'validate_argument_nid_type' => 'nid',
-      'validate_argument_vocabulary' => array(),
-      'validate_argument_type' => 'tid',
-      'validate_argument_transform' => 0,
-      'validate_user_restrict_roles' => 0,
-      'validate_argument_php' => '',
-    ),
-  ));
-  $handler->override_option('filters', array(
-    'status' => array(
-      'operator' => '=',
-      'value' => '1',
-      'group' => '0',
-      'exposed' => FALSE,
-      'expose' => array(
-        'operator' => FALSE,
-        'label' => '',
-      ),
-      'id' => 'status',
-      'table' => 'node',
-      'field' => 'status',
-      'relationship' => 'none',
-    ),
-    'type' => array(
-      'operator' => 'in',
-      'value' => array(
-        'fserver_release' => 'fserver_release',
-      ),
-      'group' => '0',
-      'exposed' => FALSE,
-      'expose' => array(
-        'operator' => FALSE,
-        'label' => '',
-      ),
-      'id' => 'type',
-      'table' => 'node',
-      'field' => 'type',
-      'relationship' => 'none',
-    ),
-  ));
-  $handler->override_option('access', array(
-    'type' => 'none',
-  ));
-  $handler->override_option('cache', array(
-    'type' => 'none',
-  ));
-  $handler->override_option('items_per_page', 0);
-  $handler->override_option('style_options', array(
-    'grouping' => '',
-  ));
-  $handler = $view->new_display('feed', 'Update XML feed', 'feed_1');
-  $handler->override_option('style_plugin', 'updatexml');
-  $handler->override_option('style_options', array(
-    'mission_description' => FALSE,
-    'description' => '',
-    'project' => array(
-      'title' => 'title',
-      'short_name' => 'field_fserver_name_value',
-      'api_version' => 'field_fserver_api_value',
-      'link' => 'nid',
-      'type' => 'field_fserver_type_value',
-      'redirect' => 'field_fserver_redirect_value',
-      'sourcecode_type' => 'field_fserver_method_value',
-      'sourcecode_uri' => 'field_fserver_repository_value',
-    ),
-    'release' => array(
-      'version_major' => 'field_fserver_versionmajor_value',
-      'version_patch' => 'field_fserver_versionpatch_value',
-      'version_extra' => 'field_fserver_versionextra_value',
-      'release_link' => 'nid_1',
-      'download_link' => 'filepath',
-      'date' => 'created',
-      'mdhash' => 'mdhash',
-      'filesize' => 'filesize',
-      'security' => 'field_fserver_security_value',
-      'recommended' => 'field_fserver_recommended_value',
-    ),
-  ));
-  $handler->override_option('row_plugin', '');
-  $handler->override_option('path', 'fserver/%/%');
-  $handler->override_option('menu', array(
-    'type' => 'none',
-    'title' => '',
-    'description' => '',
-    'weight' => 0,
-    'name' => 'navigation',
-  ));
-  $handler->override_option('tab_options', array(
-    'type' => 'none',
-    'title' => '',
-    'description' => '',
-    'weight' => 0,
-    'name' => 'navigation',
-  ));
-  $handler->override_option('displays', array());
-  $handler->override_option('sitename_title', FALSE);
 
-  $views[$view->name] = $view;
+  /* Display: Master */
+  $handler = $view->new_display('default', 'Master', 'default');
+  $handler->display->display_options['access']['type'] = 'perm';
+  $handler->display->display_options['cache']['type'] = 'none';
+  $handler->display->display_options['query']['type'] = 'views_query';
+  $handler->display->display_options['query']['options']['query_comment'] = FALSE;
+  $handler->display->display_options['exposed_form']['type'] = 'basic';
+  $handler->display->display_options['pager']['type'] = 'full';
+  $handler->display->display_options['style_plugin'] = 'default';
+  $handler->display->display_options['row_plugin'] = 'fields';
+  /* Relationship: Content: Project (field_fserver_project) */
+  $handler->display->display_options['relationships']['field_fserver_project_nid']['id'] = 'field_fserver_project_nid';
+  $handler->display->display_options['relationships']['field_fserver_project_nid']['table'] = 'field_data_field_fserver_project';
+  $handler->display->display_options['relationships']['field_fserver_project_nid']['field'] = 'field_fserver_project_nid';
+  $handler->display->display_options['relationships']['field_fserver_project_nid']['required'] = 1;
+  $handler->display->display_options['relationships']['field_fserver_project_nid']['delta'] = '-1';
+  /* Relationship: File Usage: File */
+  $handler->display->display_options['relationships']['node_to_file']['id'] = 'node_to_file';
+  $handler->display->display_options['relationships']['node_to_file']['table'] = 'file_usage';
+  $handler->display->display_options['relationships']['node_to_file']['field'] = 'node_to_file';
+  $handler->display->display_options['relationships']['node_to_file']['required'] = 1;
+  /* Field: Content: Core compatibility */
+  $handler->display->display_options['fields']['field_fserver_api']['id'] = 'field_fserver_api';
+  $handler->display->display_options['fields']['field_fserver_api']['table'] = 'field_data_field_fserver_api';
+  $handler->display->display_options['fields']['field_fserver_api']['field'] = 'field_fserver_api';
+  $handler->display->display_options['fields']['field_fserver_api']['label'] = 'Core';
+  $handler->display->display_options['fields']['field_fserver_api']['alter']['alter_text'] = 0;
+  $handler->display->display_options['fields']['field_fserver_api']['alter']['make_link'] = 0;
+  $handler->display->display_options['fields']['field_fserver_api']['alter']['absolute'] = 0;
+  $handler->display->display_options['fields']['field_fserver_api']['alter']['external'] = 0;
+  $handler->display->display_options['fields']['field_fserver_api']['alter']['replace_spaces'] = 0;
+  $handler->display->display_options['fields']['field_fserver_api']['alter']['trim_whitespace'] = 0;
+  $handler->display->display_options['fields']['field_fserver_api']['alter']['nl2br'] = 0;
+  $handler->display->display_options['fields']['field_fserver_api']['alter']['word_boundary'] = 1;
+  $handler->display->display_options['fields']['field_fserver_api']['alter']['ellipsis'] = 1;
+  $handler->display->display_options['fields']['field_fserver_api']['alter']['strip_tags'] = 0;
+  $handler->display->display_options['fields']['field_fserver_api']['alter']['trim'] = 0;
+  $handler->display->display_options['fields']['field_fserver_api']['alter']['html'] = 0;
+  $handler->display->display_options['fields']['field_fserver_api']['element_label_colon'] = 0;
+  $handler->display->display_options['fields']['field_fserver_api']['element_default_classes'] = 1;
+  $handler->display->display_options['fields']['field_fserver_api']['hide_empty'] = 0;
+  $handler->display->display_options['fields']['field_fserver_api']['empty_zero'] = 0;
+  $handler->display->display_options['fields']['field_fserver_api']['hide_alter_empty'] = 0;
+  $handler->display->display_options['fields']['field_fserver_api']['field_api_classes'] = 0;
+  /* Field: Content: Extra version */
+  $handler->display->display_options['fields']['field_fserver_versionextra']['id'] = 'field_fserver_versionextra';
+  $handler->display->display_options['fields']['field_fserver_versionextra']['table'] = 'field_data_field_fserver_versionextra';
+  $handler->display->display_options['fields']['field_fserver_versionextra']['field'] = 'field_fserver_versionextra';
+  $handler->display->display_options['fields']['field_fserver_versionextra']['label'] = 'Extra Version';
+  $handler->display->display_options['fields']['field_fserver_versionextra']['alter']['alter_text'] = 0;
+  $handler->display->display_options['fields']['field_fserver_versionextra']['alter']['make_link'] = 0;
+  $handler->display->display_options['fields']['field_fserver_versionextra']['alter']['absolute'] = 0;
+  $handler->display->display_options['fields']['field_fserver_versionextra']['alter']['external'] = 0;
+  $handler->display->display_options['fields']['field_fserver_versionextra']['alter']['replace_spaces'] = 0;
+  $handler->display->display_options['fields']['field_fserver_versionextra']['alter']['trim_whitespace'] = 0;
+  $handler->display->display_options['fields']['field_fserver_versionextra']['alter']['nl2br'] = 0;
+  $handler->display->display_options['fields']['field_fserver_versionextra']['alter']['word_boundary'] = 1;
+  $handler->display->display_options['fields']['field_fserver_versionextra']['alter']['ellipsis'] = 1;
+  $handler->display->display_options['fields']['field_fserver_versionextra']['alter']['strip_tags'] = 0;
+  $handler->display->display_options['fields']['field_fserver_versionextra']['alter']['trim'] = 0;
+  $handler->display->display_options['fields']['field_fserver_versionextra']['alter']['html'] = 0;
+  $handler->display->display_options['fields']['field_fserver_versionextra']['element_label_colon'] = 0;
+  $handler->display->display_options['fields']['field_fserver_versionextra']['element_default_classes'] = 1;
+  $handler->display->display_options['fields']['field_fserver_versionextra']['hide_empty'] = 0;
+  $handler->display->display_options['fields']['field_fserver_versionextra']['empty_zero'] = 0;
+  $handler->display->display_options['fields']['field_fserver_versionextra']['hide_alter_empty'] = 0;
+  $handler->display->display_options['fields']['field_fserver_versionextra']['field_api_classes'] = 0;
+  /* Field: Content: Major version */
+  $handler->display->display_options['fields']['field_fserver_versionmajor']['id'] = 'field_fserver_versionmajor';
+  $handler->display->display_options['fields']['field_fserver_versionmajor']['table'] = 'field_data_field_fserver_versionmajor';
+  $handler->display->display_options['fields']['field_fserver_versionmajor']['field'] = 'field_fserver_versionmajor';
+  $handler->display->display_options['fields']['field_fserver_versionmajor']['label'] = 'Major Version';
+  $handler->display->display_options['fields']['field_fserver_versionmajor']['alter']['alter_text'] = 0;
+  $handler->display->display_options['fields']['field_fserver_versionmajor']['alter']['make_link'] = 0;
+  $handler->display->display_options['fields']['field_fserver_versionmajor']['alter']['absolute'] = 0;
+  $handler->display->display_options['fields']['field_fserver_versionmajor']['alter']['external'] = 0;
+  $handler->display->display_options['fields']['field_fserver_versionmajor']['alter']['replace_spaces'] = 0;
+  $handler->display->display_options['fields']['field_fserver_versionmajor']['alter']['trim_whitespace'] = 0;
+  $handler->display->display_options['fields']['field_fserver_versionmajor']['alter']['nl2br'] = 0;
+  $handler->display->display_options['fields']['field_fserver_versionmajor']['alter']['word_boundary'] = 1;
+  $handler->display->display_options['fields']['field_fserver_versionmajor']['alter']['ellipsis'] = 1;
+  $handler->display->display_options['fields']['field_fserver_versionmajor']['alter']['strip_tags'] = 0;
+  $handler->display->display_options['fields']['field_fserver_versionmajor']['alter']['trim'] = 0;
+  $handler->display->display_options['fields']['field_fserver_versionmajor']['alter']['html'] = 0;
+  $handler->display->display_options['fields']['field_fserver_versionmajor']['element_label_colon'] = 0;
+  $handler->display->display_options['fields']['field_fserver_versionmajor']['element_default_classes'] = 1;
+  $handler->display->display_options['fields']['field_fserver_versionmajor']['hide_empty'] = 0;
+  $handler->display->display_options['fields']['field_fserver_versionmajor']['empty_zero'] = 0;
+  $handler->display->display_options['fields']['field_fserver_versionmajor']['hide_alter_empty'] = 0;
+  $handler->display->display_options['fields']['field_fserver_versionmajor']['field_api_classes'] = 0;
+  /* Field: Content: Post date */
+  $handler->display->display_options['fields']['created']['id'] = 'created';
+  $handler->display->display_options['fields']['created']['table'] = 'node';
+  $handler->display->display_options['fields']['created']['field'] = 'created';
+  $handler->display->display_options['fields']['created']['label'] = 'Post Date';
+  $handler->display->display_options['fields']['created']['alter']['alter_text'] = 0;
+  $handler->display->display_options['fields']['created']['alter']['make_link'] = 0;
+  $handler->display->display_options['fields']['created']['alter']['absolute'] = 0;
+  $handler->display->display_options['fields']['created']['alter']['external'] = 0;
+  $handler->display->display_options['fields']['created']['alter']['replace_spaces'] = 0;
+  $handler->display->display_options['fields']['created']['alter']['trim_whitespace'] = 0;
+  $handler->display->display_options['fields']['created']['alter']['nl2br'] = 0;
+  $handler->display->display_options['fields']['created']['alter']['word_boundary'] = 1;
+  $handler->display->display_options['fields']['created']['alter']['ellipsis'] = 1;
+  $handler->display->display_options['fields']['created']['alter']['strip_tags'] = 0;
+  $handler->display->display_options['fields']['created']['alter']['trim'] = 0;
+  $handler->display->display_options['fields']['created']['alter']['html'] = 0;
+  $handler->display->display_options['fields']['created']['element_label_colon'] = 0;
+  $handler->display->display_options['fields']['created']['element_default_classes'] = 1;
+  $handler->display->display_options['fields']['created']['hide_empty'] = 0;
+  $handler->display->display_options['fields']['created']['empty_zero'] = 0;
+  $handler->display->display_options['fields']['created']['hide_alter_empty'] = 0;
+  $handler->display->display_options['fields']['created']['date_format'] = 'long';
+  /* Field: Content: Title */
+  $handler->display->display_options['fields']['title']['id'] = 'title';
+  $handler->display->display_options['fields']['title']['table'] = 'node';
+  $handler->display->display_options['fields']['title']['field'] = 'title';
+  $handler->display->display_options['fields']['title']['relationship'] = 'field_fserver_project_nid';
+  $handler->display->display_options['fields']['title']['label'] = '';
+  $handler->display->display_options['fields']['title']['alter']['alter_text'] = 0;
+  $handler->display->display_options['fields']['title']['alter']['make_link'] = 0;
+  $handler->display->display_options['fields']['title']['alter']['absolute'] = 0;
+  $handler->display->display_options['fields']['title']['alter']['external'] = 0;
+  $handler->display->display_options['fields']['title']['alter']['replace_spaces'] = 0;
+  $handler->display->display_options['fields']['title']['alter']['trim_whitespace'] = 0;
+  $handler->display->display_options['fields']['title']['alter']['nl2br'] = 0;
+  $handler->display->display_options['fields']['title']['alter']['word_boundary'] = 1;
+  $handler->display->display_options['fields']['title']['alter']['ellipsis'] = 1;
+  $handler->display->display_options['fields']['title']['alter']['strip_tags'] = 0;
+  $handler->display->display_options['fields']['title']['alter']['trim'] = 0;
+  $handler->display->display_options['fields']['title']['alter']['html'] = 0;
+  $handler->display->display_options['fields']['title']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['title']['element_default_classes'] = 1;
+  $handler->display->display_options['fields']['title']['hide_empty'] = 0;
+  $handler->display->display_options['fields']['title']['empty_zero'] = 0;
+  $handler->display->display_options['fields']['title']['hide_alter_empty'] = 0;
+  $handler->display->display_options['fields']['title']['link_to_node'] = 0;
+  /* Field: Content: Machine name */
+  $handler->display->display_options['fields']['field_fserver_name']['id'] = 'field_fserver_name';
+  $handler->display->display_options['fields']['field_fserver_name']['table'] = 'field_data_field_fserver_name';
+  $handler->display->display_options['fields']['field_fserver_name']['field'] = 'field_fserver_name';
+  $handler->display->display_options['fields']['field_fserver_name']['relationship'] = 'field_fserver_project_nid';
+  $handler->display->display_options['fields']['field_fserver_name']['label'] = '';
+  $handler->display->display_options['fields']['field_fserver_name']['alter']['alter_text'] = 0;
+  $handler->display->display_options['fields']['field_fserver_name']['alter']['make_link'] = 0;
+  $handler->display->display_options['fields']['field_fserver_name']['alter']['absolute'] = 0;
+  $handler->display->display_options['fields']['field_fserver_name']['alter']['external'] = 0;
+  $handler->display->display_options['fields']['field_fserver_name']['alter']['replace_spaces'] = 0;
+  $handler->display->display_options['fields']['field_fserver_name']['alter']['trim_whitespace'] = 0;
+  $handler->display->display_options['fields']['field_fserver_name']['alter']['nl2br'] = 0;
+  $handler->display->display_options['fields']['field_fserver_name']['alter']['word_boundary'] = 1;
+  $handler->display->display_options['fields']['field_fserver_name']['alter']['ellipsis'] = 1;
+  $handler->display->display_options['fields']['field_fserver_name']['alter']['strip_tags'] = 0;
+  $handler->display->display_options['fields']['field_fserver_name']['alter']['trim'] = 0;
+  $handler->display->display_options['fields']['field_fserver_name']['alter']['html'] = 0;
+  $handler->display->display_options['fields']['field_fserver_name']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['field_fserver_name']['element_default_classes'] = 1;
+  $handler->display->display_options['fields']['field_fserver_name']['hide_empty'] = 0;
+  $handler->display->display_options['fields']['field_fserver_name']['empty_zero'] = 0;
+  $handler->display->display_options['fields']['field_fserver_name']['hide_alter_empty'] = 0;
+  $handler->display->display_options['fields']['field_fserver_name']['field_api_classes'] = 0;
+  /* Field: Content: Nid */
+  $handler->display->display_options['fields']['nid']['id'] = 'nid';
+  $handler->display->display_options['fields']['nid']['table'] = 'node';
+  $handler->display->display_options['fields']['nid']['field'] = 'nid';
+  $handler->display->display_options['fields']['nid']['relationship'] = 'field_fserver_project_nid';
+  $handler->display->display_options['fields']['nid']['label'] = 'Project Url';
+  $handler->display->display_options['fields']['nid']['alter']['alter_text'] = 1;
+  $handler->display->display_options['fields']['nid']['alter']['text'] = 'node/[nid]';
+  $handler->display->display_options['fields']['nid']['alter']['make_link'] = 0;
+  $handler->display->display_options['fields']['nid']['alter']['absolute'] = 0;
+  $handler->display->display_options['fields']['nid']['alter']['external'] = 0;
+  $handler->display->display_options['fields']['nid']['alter']['replace_spaces'] = 0;
+  $handler->display->display_options['fields']['nid']['alter']['trim_whitespace'] = 0;
+  $handler->display->display_options['fields']['nid']['alter']['nl2br'] = 0;
+  $handler->display->display_options['fields']['nid']['alter']['word_boundary'] = 1;
+  $handler->display->display_options['fields']['nid']['alter']['ellipsis'] = 1;
+  $handler->display->display_options['fields']['nid']['alter']['strip_tags'] = 0;
+  $handler->display->display_options['fields']['nid']['alter']['trim'] = 0;
+  $handler->display->display_options['fields']['nid']['alter']['html'] = 0;
+  $handler->display->display_options['fields']['nid']['element_label_colon'] = 1;
+  $handler->display->display_options['fields']['nid']['element_default_classes'] = 1;
+  $handler->display->display_options['fields']['nid']['hide_empty'] = 0;
+  $handler->display->display_options['fields']['nid']['empty_zero'] = 0;
+  $handler->display->display_options['fields']['nid']['hide_alter_empty'] = 0;
+  $handler->display->display_options['fields']['nid']['link_to_node'] = 0;
+  /* Field: File: Path */
+  $handler->display->display_options['fields']['uri']['id'] = 'uri';
+  $handler->display->display_options['fields']['uri']['table'] = 'file_managed';
+  $handler->display->display_options['fields']['uri']['field'] = 'uri';
+  $handler->display->display_options['fields']['uri']['relationship'] = 'node_to_file';
+  /* Field: File: Size */
+  $handler->display->display_options['fields']['filesize']['id'] = 'filesize';
+  $handler->display->display_options['fields']['filesize']['table'] = 'file_managed';
+  $handler->display->display_options['fields']['filesize']['field'] = 'filesize';
+  $handler->display->display_options['fields']['filesize']['relationship'] = 'node_to_file';
+  $handler->display->display_options['fields']['filesize']['alter']['alter_text'] = 0;
+  $handler->display->display_options['fields']['filesize']['alter']['make_link'] = 0;
+  $handler->display->display_options['fields']['filesize']['alter']['absolute'] = 0;
+  $handler->display->display_options['fields']['filesize']['alter']['external'] = 0;
+  $handler->display->display_options['fields']['filesize']['alter']['replace_spaces'] = 0;
+  $handler->display->display_options['fields']['filesize']['alter']['trim_whitespace'] = 0;
+  $handler->display->display_options['fields']['filesize']['alter']['nl2br'] = 0;
+  $handler->display->display_options['fields']['filesize']['alter']['word_boundary'] = 1;
+  $handler->display->display_options['fields']['filesize']['alter']['ellipsis'] = 1;
+  $handler->display->display_options['fields']['filesize']['alter']['strip_tags'] = 0;
+  $handler->display->display_options['fields']['filesize']['alter']['trim'] = 0;
+  $handler->display->display_options['fields']['filesize']['alter']['html'] = 0;
+  $handler->display->display_options['fields']['filesize']['element_label_colon'] = 1;
+  $handler->display->display_options['fields']['filesize']['element_default_classes'] = 1;
+  $handler->display->display_options['fields']['filesize']['hide_empty'] = 0;
+  $handler->display->display_options['fields']['filesize']['empty_zero'] = 0;
+  $handler->display->display_options['fields']['filesize']['hide_alter_empty'] = 0;
+  /* Field: Content: Nid */
+  $handler->display->display_options['fields']['nid_1']['id'] = 'nid_1';
+  $handler->display->display_options['fields']['nid_1']['table'] = 'node';
+  $handler->display->display_options['fields']['nid_1']['field'] = 'nid';
+  $handler->display->display_options['fields']['nid_1']['label'] = 'Release Url';
+  $handler->display->display_options['fields']['nid_1']['alter']['alter_text'] = 1;
+  $handler->display->display_options['fields']['nid_1']['alter']['text'] = 'node/[nid_1]';
+  $handler->display->display_options['fields']['nid_1']['alter']['make_link'] = 0;
+  $handler->display->display_options['fields']['nid_1']['alter']['absolute'] = 0;
+  $handler->display->display_options['fields']['nid_1']['alter']['external'] = 0;
+  $handler->display->display_options['fields']['nid_1']['alter']['replace_spaces'] = 0;
+  $handler->display->display_options['fields']['nid_1']['alter']['trim_whitespace'] = 0;
+  $handler->display->display_options['fields']['nid_1']['alter']['nl2br'] = 0;
+  $handler->display->display_options['fields']['nid_1']['alter']['word_boundary'] = 1;
+  $handler->display->display_options['fields']['nid_1']['alter']['ellipsis'] = 1;
+  $handler->display->display_options['fields']['nid_1']['alter']['strip_tags'] = 0;
+  $handler->display->display_options['fields']['nid_1']['alter']['trim'] = 0;
+  $handler->display->display_options['fields']['nid_1']['alter']['html'] = 0;
+  $handler->display->display_options['fields']['nid_1']['element_label_colon'] = 1;
+  $handler->display->display_options['fields']['nid_1']['element_default_classes'] = 1;
+  $handler->display->display_options['fields']['nid_1']['hide_empty'] = 0;
+  $handler->display->display_options['fields']['nid_1']['empty_zero'] = 0;
+  $handler->display->display_options['fields']['nid_1']['hide_alter_empty'] = 0;
+  $handler->display->display_options['fields']['nid_1']['link_to_node'] = 0;
+  /* Field: File: MD5 hash */
+  $handler->display->display_options['fields']['mdhash']['id'] = 'mdhash';
+  $handler->display->display_options['fields']['mdhash']['table'] = 'file_managed';
+  $handler->display->display_options['fields']['mdhash']['field'] = 'mdhash';
+  $handler->display->display_options['fields']['mdhash']['relationship'] = 'node_to_file';
+  $handler->display->display_options['fields']['mdhash']['element_label_colon'] = 1;
+  $handler->display->display_options['fields']['mdhash']['element_default_classes'] = 1;
+  $handler->display->display_options['fields']['mdhash']['hide_empty'] = 0;
+  $handler->display->display_options['fields']['mdhash']['empty_zero'] = 0;
+  $handler->display->display_options['fields']['mdhash']['hide_alter_empty'] = 0;
+  /* Field: Content: Recommended */
+  $handler->display->display_options['fields']['field_fserver_recommended']['id'] = 'field_fserver_recommended';
+  $handler->display->display_options['fields']['field_fserver_recommended']['table'] = 'field_data_field_fserver_recommended';
+  $handler->display->display_options['fields']['field_fserver_recommended']['field'] = 'field_fserver_recommended';
+  $handler->display->display_options['fields']['field_fserver_recommended']['alter']['alter_text'] = 0;
+  $handler->display->display_options['fields']['field_fserver_recommended']['alter']['make_link'] = 0;
+  $handler->display->display_options['fields']['field_fserver_recommended']['alter']['absolute'] = 0;
+  $handler->display->display_options['fields']['field_fserver_recommended']['alter']['external'] = 0;
+  $handler->display->display_options['fields']['field_fserver_recommended']['alter']['replace_spaces'] = 0;
+  $handler->display->display_options['fields']['field_fserver_recommended']['alter']['trim_whitespace'] = 0;
+  $handler->display->display_options['fields']['field_fserver_recommended']['alter']['nl2br'] = 0;
+  $handler->display->display_options['fields']['field_fserver_recommended']['alter']['word_boundary'] = 1;
+  $handler->display->display_options['fields']['field_fserver_recommended']['alter']['ellipsis'] = 1;
+  $handler->display->display_options['fields']['field_fserver_recommended']['alter']['strip_tags'] = 0;
+  $handler->display->display_options['fields']['field_fserver_recommended']['alter']['trim'] = 0;
+  $handler->display->display_options['fields']['field_fserver_recommended']['alter']['html'] = 0;
+  $handler->display->display_options['fields']['field_fserver_recommended']['element_label_colon'] = 0;
+  $handler->display->display_options['fields']['field_fserver_recommended']['element_default_classes'] = 1;
+  $handler->display->display_options['fields']['field_fserver_recommended']['hide_empty'] = 0;
+  $handler->display->display_options['fields']['field_fserver_recommended']['empty_zero'] = 0;
+  $handler->display->display_options['fields']['field_fserver_recommended']['hide_alter_empty'] = 0;
+  $handler->display->display_options['fields']['field_fserver_recommended']['field_api_classes'] = 0;
+  /* Field: Content: Security release */
+  $handler->display->display_options['fields']['field_fserver_security']['id'] = 'field_fserver_security';
+  $handler->display->display_options['fields']['field_fserver_security']['table'] = 'field_data_field_fserver_security';
+  $handler->display->display_options['fields']['field_fserver_security']['field'] = 'field_fserver_security';
+  $handler->display->display_options['fields']['field_fserver_security']['label'] = 'Security';
+  $handler->display->display_options['fields']['field_fserver_security']['alter']['alter_text'] = 0;
+  $handler->display->display_options['fields']['field_fserver_security']['alter']['make_link'] = 0;
+  $handler->display->display_options['fields']['field_fserver_security']['alter']['absolute'] = 0;
+  $handler->display->display_options['fields']['field_fserver_security']['alter']['external'] = 0;
+  $handler->display->display_options['fields']['field_fserver_security']['alter']['replace_spaces'] = 0;
+  $handler->display->display_options['fields']['field_fserver_security']['alter']['trim_whitespace'] = 0;
+  $handler->display->display_options['fields']['field_fserver_security']['alter']['nl2br'] = 0;
+  $handler->display->display_options['fields']['field_fserver_security']['alter']['word_boundary'] = 1;
+  $handler->display->display_options['fields']['field_fserver_security']['alter']['ellipsis'] = 1;
+  $handler->display->display_options['fields']['field_fserver_security']['alter']['strip_tags'] = 0;
+  $handler->display->display_options['fields']['field_fserver_security']['alter']['trim'] = 0;
+  $handler->display->display_options['fields']['field_fserver_security']['alter']['html'] = 0;
+  $handler->display->display_options['fields']['field_fserver_security']['element_label_colon'] = 0;
+  $handler->display->display_options['fields']['field_fserver_security']['element_default_classes'] = 1;
+  $handler->display->display_options['fields']['field_fserver_security']['hide_empty'] = 0;
+  $handler->display->display_options['fields']['field_fserver_security']['empty_zero'] = 0;
+  $handler->display->display_options['fields']['field_fserver_security']['hide_alter_empty'] = 0;
+  $handler->display->display_options['fields']['field_fserver_security']['field_api_classes'] = 0;
+  /* Field: Content: Packaging Method */
+  $handler->display->display_options['fields']['field_fserver_method']['id'] = 'field_fserver_method';
+  $handler->display->display_options['fields']['field_fserver_method']['table'] = 'field_data_field_fserver_method';
+  $handler->display->display_options['fields']['field_fserver_method']['field'] = 'field_fserver_method';
+  $handler->display->display_options['fields']['field_fserver_method']['relationship'] = 'field_fserver_project_nid';
+  $handler->display->display_options['fields']['field_fserver_method']['label'] = 'Packaging';
+  $handler->display->display_options['fields']['field_fserver_method']['alter']['alter_text'] = 0;
+  $handler->display->display_options['fields']['field_fserver_method']['alter']['make_link'] = 0;
+  $handler->display->display_options['fields']['field_fserver_method']['alter']['absolute'] = 0;
+  $handler->display->display_options['fields']['field_fserver_method']['alter']['external'] = 0;
+  $handler->display->display_options['fields']['field_fserver_method']['alter']['replace_spaces'] = 0;
+  $handler->display->display_options['fields']['field_fserver_method']['alter']['trim_whitespace'] = 0;
+  $handler->display->display_options['fields']['field_fserver_method']['alter']['nl2br'] = 0;
+  $handler->display->display_options['fields']['field_fserver_method']['alter']['word_boundary'] = 1;
+  $handler->display->display_options['fields']['field_fserver_method']['alter']['ellipsis'] = 1;
+  $handler->display->display_options['fields']['field_fserver_method']['alter']['strip_tags'] = 0;
+  $handler->display->display_options['fields']['field_fserver_method']['alter']['trim'] = 0;
+  $handler->display->display_options['fields']['field_fserver_method']['alter']['html'] = 0;
+  $handler->display->display_options['fields']['field_fserver_method']['element_label_colon'] = 0;
+  $handler->display->display_options['fields']['field_fserver_method']['element_default_classes'] = 1;
+  $handler->display->display_options['fields']['field_fserver_method']['hide_empty'] = 0;
+  $handler->display->display_options['fields']['field_fserver_method']['empty_zero'] = 0;
+  $handler->display->display_options['fields']['field_fserver_method']['hide_alter_empty'] = 0;
+  $handler->display->display_options['fields']['field_fserver_method']['field_api_classes'] = 0;
+  /* Field: Content: Redirect URL (for legacy projects) */
+  $handler->display->display_options['fields']['field_fserver_redirect']['id'] = 'field_fserver_redirect';
+  $handler->display->display_options['fields']['field_fserver_redirect']['table'] = 'field_data_field_fserver_redirect';
+  $handler->display->display_options['fields']['field_fserver_redirect']['field'] = 'field_fserver_redirect';
+  $handler->display->display_options['fields']['field_fserver_redirect']['relationship'] = 'field_fserver_project_nid';
+  $handler->display->display_options['fields']['field_fserver_redirect']['label'] = 'Redirect';
+  $handler->display->display_options['fields']['field_fserver_redirect']['alter']['alter_text'] = 0;
+  $handler->display->display_options['fields']['field_fserver_redirect']['alter']['make_link'] = 0;
+  $handler->display->display_options['fields']['field_fserver_redirect']['alter']['absolute'] = 0;
+  $handler->display->display_options['fields']['field_fserver_redirect']['alter']['external'] = 0;
+  $handler->display->display_options['fields']['field_fserver_redirect']['alter']['replace_spaces'] = 0;
+  $handler->display->display_options['fields']['field_fserver_redirect']['alter']['trim_whitespace'] = 0;
+  $handler->display->display_options['fields']['field_fserver_redirect']['alter']['nl2br'] = 0;
+  $handler->display->display_options['fields']['field_fserver_redirect']['alter']['word_boundary'] = 1;
+  $handler->display->display_options['fields']['field_fserver_redirect']['alter']['ellipsis'] = 1;
+  $handler->display->display_options['fields']['field_fserver_redirect']['alter']['strip_tags'] = 0;
+  $handler->display->display_options['fields']['field_fserver_redirect']['alter']['trim'] = 0;
+  $handler->display->display_options['fields']['field_fserver_redirect']['alter']['html'] = 0;
+  $handler->display->display_options['fields']['field_fserver_redirect']['element_label_colon'] = 0;
+  $handler->display->display_options['fields']['field_fserver_redirect']['element_default_classes'] = 1;
+  $handler->display->display_options['fields']['field_fserver_redirect']['hide_empty'] = 0;
+  $handler->display->display_options['fields']['field_fserver_redirect']['empty_zero'] = 0;
+  $handler->display->display_options['fields']['field_fserver_redirect']['hide_alter_empty'] = 0;
+  $handler->display->display_options['fields']['field_fserver_redirect']['field_api_classes'] = 0;
+  /* Field: Content: Repository URL */
+  $handler->display->display_options['fields']['field_fserver_repository']['id'] = 'field_fserver_repository';
+  $handler->display->display_options['fields']['field_fserver_repository']['table'] = 'field_data_field_fserver_repository';
+  $handler->display->display_options['fields']['field_fserver_repository']['field'] = 'field_fserver_repository';
+  $handler->display->display_options['fields']['field_fserver_repository']['relationship'] = 'field_fserver_project_nid';
+  $handler->display->display_options['fields']['field_fserver_repository']['label'] = 'Repository';
+  $handler->display->display_options['fields']['field_fserver_repository']['alter']['alter_text'] = 0;
+  $handler->display->display_options['fields']['field_fserver_repository']['alter']['make_link'] = 0;
+  $handler->display->display_options['fields']['field_fserver_repository']['alter']['absolute'] = 0;
+  $handler->display->display_options['fields']['field_fserver_repository']['alter']['external'] = 0;
+  $handler->display->display_options['fields']['field_fserver_repository']['alter']['replace_spaces'] = 0;
+  $handler->display->display_options['fields']['field_fserver_repository']['alter']['trim_whitespace'] = 0;
+  $handler->display->display_options['fields']['field_fserver_repository']['alter']['nl2br'] = 0;
+  $handler->display->display_options['fields']['field_fserver_repository']['alter']['word_boundary'] = 1;
+  $handler->display->display_options['fields']['field_fserver_repository']['alter']['ellipsis'] = 1;
+  $handler->display->display_options['fields']['field_fserver_repository']['alter']['strip_tags'] = 0;
+  $handler->display->display_options['fields']['field_fserver_repository']['alter']['trim'] = 0;
+  $handler->display->display_options['fields']['field_fserver_repository']['alter']['html'] = 0;
+  $handler->display->display_options['fields']['field_fserver_repository']['element_label_colon'] = 0;
+  $handler->display->display_options['fields']['field_fserver_repository']['element_default_classes'] = 1;
+  $handler->display->display_options['fields']['field_fserver_repository']['hide_empty'] = 0;
+  $handler->display->display_options['fields']['field_fserver_repository']['empty_zero'] = 0;
+  $handler->display->display_options['fields']['field_fserver_repository']['hide_alter_empty'] = 0;
+  $handler->display->display_options['fields']['field_fserver_repository']['field_api_classes'] = 0;
+  /* Field: Content: Type */
+  $handler->display->display_options['fields']['field_fserver_type']['id'] = 'field_fserver_type';
+  $handler->display->display_options['fields']['field_fserver_type']['table'] = 'field_data_field_fserver_type';
+  $handler->display->display_options['fields']['field_fserver_type']['field'] = 'field_fserver_type';
+  $handler->display->display_options['fields']['field_fserver_type']['relationship'] = 'field_fserver_project_nid';
+  $handler->display->display_options['fields']['field_fserver_type']['alter']['alter_text'] = 0;
+  $handler->display->display_options['fields']['field_fserver_type']['alter']['make_link'] = 0;
+  $handler->display->display_options['fields']['field_fserver_type']['alter']['absolute'] = 0;
+  $handler->display->display_options['fields']['field_fserver_type']['alter']['external'] = 0;
+  $handler->display->display_options['fields']['field_fserver_type']['alter']['replace_spaces'] = 0;
+  $handler->display->display_options['fields']['field_fserver_type']['alter']['trim_whitespace'] = 0;
+  $handler->display->display_options['fields']['field_fserver_type']['alter']['nl2br'] = 0;
+  $handler->display->display_options['fields']['field_fserver_type']['alter']['word_boundary'] = 1;
+  $handler->display->display_options['fields']['field_fserver_type']['alter']['ellipsis'] = 1;
+  $handler->display->display_options['fields']['field_fserver_type']['alter']['strip_tags'] = 0;
+  $handler->display->display_options['fields']['field_fserver_type']['alter']['trim'] = 0;
+  $handler->display->display_options['fields']['field_fserver_type']['alter']['html'] = 0;
+  $handler->display->display_options['fields']['field_fserver_type']['element_label_colon'] = 0;
+  $handler->display->display_options['fields']['field_fserver_type']['element_default_classes'] = 1;
+  $handler->display->display_options['fields']['field_fserver_type']['hide_empty'] = 0;
+  $handler->display->display_options['fields']['field_fserver_type']['empty_zero'] = 0;
+  $handler->display->display_options['fields']['field_fserver_type']['hide_alter_empty'] = 0;
+  $handler->display->display_options['fields']['field_fserver_type']['field_api_classes'] = 0;
+  /* Sort criterion: Content: Release tag */
+  $handler->display->display_options['sorts']['release_tag']['id'] = 'release_tag';
+  $handler->display->display_options['sorts']['release_tag']['table'] = 'views';
+  $handler->display->display_options['sorts']['release_tag']['field'] = 'release_tag';
+  $handler->display->display_options['sorts']['release_tag']['order'] = 'DESC';
+  /* Sort criterion: Content: Post date */
+  $handler->display->display_options['sorts']['created']['id'] = 'created';
+  $handler->display->display_options['sorts']['created']['table'] = 'node';
+  $handler->display->display_options['sorts']['created']['field'] = 'created';
+  $handler->display->display_options['sorts']['created']['order'] = 'DESC';
+  /* Filter criterion: Content: Published */
+  $handler->display->display_options['filters']['status']['id'] = 'status';
+  $handler->display->display_options['filters']['status']['table'] = 'node';
+  $handler->display->display_options['filters']['status']['field'] = 'status';
+  $handler->display->display_options['filters']['status']['value'] = 1;
+  $handler->display->display_options['filters']['status']['group'] = 0;
+  $handler->display->display_options['filters']['status']['expose']['operator'] = FALSE;
+  /* Filter criterion: Content: Type */
+  $handler->display->display_options['filters']['type']['id'] = 'type';
+  $handler->display->display_options['filters']['type']['table'] = 'node';
+  $handler->display->display_options['filters']['type']['field'] = 'type';
+  $handler->display->display_options['filters']['type']['value'] = array(
+    'fserver_release' => 'fserver_release',
+  );
 
-  return $views;
+  /* Display: Feed */
+  $handler = $view->new_display('feed', 'Feed', 'feed_1');
+  $handler->display->display_options['pager']['type'] = 'some';
+  $handler->display->display_options['style_plugin'] = 'updatexml';
+  $handler->display->display_options['style_options']['project'] = array(
+    'title' => 'title',
+    'short_name' => 'field_fserver_name',
+    'api_version' => 'field_fserver_api',
+    'link' => 'nid',
+    'type' => 'field_fserver_type',
+    'redirect' => 'field_fserver_redirect',
+    'sourcecode_type' => 'field_fserver_type',
+    'sourcecode_uri' => 'field_fserver_repository',
+  );
+  $handler->display->display_options['style_options']['release'] = array(
+    'version_major' => 'field_fserver_versionmajor',
+    'version_patch' => 'field_fserver_versionextra',
+    'version_extra' => 'field_fserver_versionextra',
+    'release_link' => 'nid_1',
+    'download_link' => 'uri',
+    'date' => 'created',
+    'mdhash' => 'mdhash',
+    'filesize' => 'filesize',
+    'security' => 'field_fserver_security',
+    'recommended' => 'field_fserver_recommended',
+  );
+  $handler->display->display_options['path'] = 'fserver/%/%';
+  $export['fserver_updates'] = $view;
+
+  return $export;
 }

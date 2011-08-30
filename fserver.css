@@ -1,13 +1,13 @@
-div#edit-field-fserver-api-value-wrapper,
-div#edit-field-fserver-versionmajor-value-wrapper,
-div#edit-field-fserver-versionpatch-value-wrapper,
-div#edit-field-fserver-versionextra-0-value-wrapper {
-div#edit-field-fserver-versionextratype-value-wrapper {
-div#edit-field-fserver-versionextranum-value-wrapper {
+div#edit-field-fserver-api,
+div#edit-field-fserver-versionmajor,
+div#edit-field-fserver-versionpatch,
+div#edit-field-fserver-versionextra,
+div#edit-field-fserver-versionextratype,
+div#edit-field-fserver-versionextranum {
   float: left;
   margin-right: 1em;
 }
-div#edit-field-fserver-recommended-value-wrapper {
+div#edit-field-fserver-recommended {
   clear: both;
 }
 ul#fserver-release-info,

@@ -9,8 +9,16 @@ class fserver_handler_sort_release_tag extends views_handler_sort {
    * Called to add the sort to a query.
    */
   function query() {
+    // This is not a pretty port but don't know the best way yet.
+    // TODO: Remove hard coding.
     $table = 'node_data_field_fserver_project';
-    $table_alias = $this->query->ensure_table($table, $this->relationship);
+    $core_alias = $this->query->ensure_table('field_data_field_fserver_api', $this->relationship);
+    $noextra_alias = $this->query->ensure_table('field_data_field_fserver_versionextra', $this->relationship);
+    $major_alias = $this->query->ensure_table('field_data_field_fserver_versionmajor', $this->relationship);
+    $patch_alias = $this->query->ensure_table('field_data_field_fserver_versionpatch', $this->relationship);
+    $extratype_alias = $this->query->ensure_table('field_data_field_fserver_versionextratype', $this->relationship);
+    $extranum_alias = $this->query->ensure_table('field_data_field_fserver_versionextranum', $this->relationship);
+
 
     // Order by:
     // 1. API version (e.g. 6.x before 5.x).
@@ -20,22 +28,21 @@ class fserver_handler_sort_release_tag extends views_handler_sort {
     // 5. versionextra stuff (2.1-beta1 before 2.1-alpha1).
 
     // 1. API.
-    $this->query->add_orderby($table_alias, 'field_fserver_api_value', $this->options['order']);
+    $this->query->add_orderby($core_alias, 'field_fserver_api_value', $this->options['order']);
 
     // 2.
-    $this->query->add_field(NULL, "IF ({$table}.field_fserver_versionextra_value IS NULL, 1, 0)", "{$table}_no_extra");
-    $this->query->add_orderby(NULL, NULL, $this->options['order'], "{$table}_no_extra");
+    $this->query->add_field(NULL, "IF ({$noextra_alias}.field_fserver_versionextra_value IS NULL, 1, 0)", "{{$noextra_alias}}_no_extra");
+    $this->query->add_orderby(NULL, NULL, $this->options['order'], "{$noextra_alias}_no_extra");
 
     // 3-5.
     $fields = array(
-      array('field_name' => 'field_fserver_versionmajor'),
-      array('field_name' => 'field_fserver_versionpatch'),
-      array('field_name' => 'field_fserver_versionextratype'),
-      array('field_name' => 'field_fserver_versionextranum'),
+      'major_alias' => 'field_fserver_versionmajor',
+      'patch_alias' => 'field_fserver_versionpatch',
+      'extratype_alias' => 'field_fserver_versionextratype',
+      'extranum_alias' => 'field_fserver_versionextranum',
     );
-    foreach ($fields as $field) {
-      $column = $field['field_name'] .'_value';
-      $this->query->add_orderby($table_alias, $column, $this->options['order']);
+    foreach ($fields as $table => $field) {
+      $this->query->add_orderby(${$table}, $field . '_value', $this->options['order']);
     }
   }
 }

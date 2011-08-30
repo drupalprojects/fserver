@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Implementation of hook_views_plugins().
+ * Implements hook_views_plugins().
  */
 function fserver_views_plugins() {
   return array(
@@ -12,8 +12,8 @@ function fserver_views_plugins() {
         'help' => t('Generates a project XML feed compatible with the update module.'),
         'handler' => 'fserver_plugin_style_updatexml',
         'theme' => 'fserver_updatexml',
-        'theme path' => drupal_get_path('module', 'fserver') .'/views',
-        'path' => drupal_get_path('module', 'fserver') .'/views',
+        'theme path' => drupal_get_path('module', 'fserver') . '/views',
+        'path' => drupal_get_path('module', 'fserver') . '/views',
         'uses row plugin' => FALSE,
         'uses fields' => TRUE,
         'uses options' => TRUE,
@@ -24,14 +24,14 @@ function fserver_views_plugins() {
 }
 
 /**
- * Implementation of hook_views_plugins().
+ * Implements hook_views_plugins().
  */
 function fserver_views_data() {
   $data = array();
 
   // MD5 hash
-  $data['files']['mdhash'] = array(
-    'real field' => 'filepath',
+  $data['file_managed']['mdhash'] = array(
+    'real field' => 'uri',
     'title' => t('MD5 hash'),
     'help' => t('Provides an MD5 hash of the file.'),
     'field' => array(
@@ -58,12 +58,12 @@ function fserver_views_data() {
 }
 
 /**
- * Implementation of hook_views_handlers().
+ * Implements hook_views_handlers().
  */
 function fserver_views_handlers() {
   return array(
     'info' => array(
-      'path' => drupal_get_path('module', 'fserver') .'/views',
+      'path' => drupal_get_path('module', 'fserver') . '/views',
     ),
     'handlers' => array(
       'fserver_handler_field_mdhash' => array(
