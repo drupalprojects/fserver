@@ -378,7 +378,8 @@ class FserverProject_git {
     $tag = $this->get_tag($tag_id);
     if ($tag) {
       $base = "{$this->FserverProject->name}-{$tag_id}";
-      $file_path = file_directory_path() . '/fserver';
+      $wrapper = "public://";
+      $file_path = drupal_realpath("{$wrapper}fserver");
       // Create the directory if it doesn't exist.
       if (file_prepare_directory($file_path, TRUE)) {
         $vc = $tag['original'];
@@ -397,12 +398,12 @@ class FserverProject_git {
         $file = new stdClass();
         $file->uid = $this->node->uid;
         $file->filename = "{$base}.tgz";
-        $file->filepath = "{$file_path}/{$base}.tgz";
+        $file->uri = "{$wrapper}fserver/{$base}.tgz";
         $file->filemime = file_get_mimetype($file->filename);
         $file->filesize = filesize($file->filepath);
         $file->status = FILE_STATUS_PERMANENT;
         $file->timestamp = REQUEST_TIME;
-        drupal_write_record('files', $file);
+        file_save($file);
 
         return $file;
       }
@@ -498,7 +499,8 @@ class FserverProject_svn {
     $tag = $this->get_tag($tag_id);
     if ($tag) {
       $base = "{$this->FserverProject->name}-{$tag_id}";
-      $file_path = file_directory_path() . '/fserver';
+      $wrapper = "public://";
+      $file_path = drupal_realpath("{$wrapper}fserver");
       // Create the directory if it doesn't exist.
       if (file_prepare_directory($file_path, TRUE)) {
         $vc = $tag['original'];
@@ -518,16 +520,15 @@ class FserverProject_svn {
         drush_op('chmod', "{$file_path}/{$base}.tgz", 0775);
         drush_op('chgrp', "{$file_path}/{$base}.tgz", fserver_posix_groupname());
 
-        // FIXME: Need to implement new file system for D7
         $file = new stdClass();
         $file->uid = $this->node->uid;
         $file->filename = "{$base}.tgz";
-        $file->filepath = "{$file_path}/{$base}.tgz";
+        $file->uri = "{$wrapper}fserver/{$base}.tgz";
         $file->filemime = file_get_mimetype($file->filename);
         $file->filesize = filesize($file->filepath);
         $file->status = FILE_STATUS_PERMANENT;
         $file->timestamp = REQUEST_TIME;
-        drupal_write_record('files', $file);
+        file_save($file);
 
         return $file;
       }
@@ -770,7 +771,8 @@ class FserverDistro {
       return FALSE;
     }
     $base = "{$this->name}-{$this->raw_version}";
-    $file_path = file_directory_path() . '/fserver';
+    $wrapper = "public://";
+    $file_path = drupal_realpath("{$wrapper}fserver");
     // Create the directory if it doesn't exist.
     if (file_prepare_directory($file_path, TRUE)) {
       drush_backend_invoke('make', array("{$this->path}/{$base}.make", "{$file_path}/{$base}", "--tar"));
@@ -784,11 +786,10 @@ class FserverDistro {
       drush_op('chmod', "{$file_path}/{$base}.tgz", 0775);
       drush_op('chgrp', "{$file_path}/{$base}.tgz", fserver_posix_groupname());
 
-      // FIXME: Need to implement new file system for D7
       $file = new stdClass();
       $file->uid = $this->node->uid;
       $file->filename = "{$base}.tgz";
-      $file->uri = "{$file_path}/{$base}.tgz";
+      $file->uri = "{$wrapper}fserver/{$base}.tgz";
       $file->filemime = file_get_mimetype($file->filename);
       $file->filesize = filesize($file->filepath);
       $file->status = FILE_STATUS_PERMANENT;
