@@ -72,6 +72,7 @@ function drush_fserver_package() {
   $rows = array();
   foreach ($projects as $project) {
     $new_tags = $project->get_new_tags();
+
     if (!empty($new_tags)) {
       foreach ($new_tags as $tag_id => $tag) {
         $release = $project->create_release($tag_id);
@@ -272,7 +273,7 @@ class FserverProject {
   /**
    * Write packaging information for a release.
    */
-  function write_package_info($tag, $exclude_mask = array('.', '..', 'CVS')) {
+  function write_package_info($tag) {
     if (isset($this->backend)) {
       $fserver_url = url("fserver", array('purl' => array('disabled' => TRUE), 'absolute' => TRUE));
 
@@ -285,7 +286,7 @@ class FserverProject {
       $packaging[] = "version = \"{$tag['version']}\"";
       $packaging = "\n" . implode("\n", $packaging);
 
-      $files = file_scan_directory($this->backend->path, '/.info$/', array('nomask' => $exclude_mask));
+      $files = file_scan_directory($this->backend->path, '/.info$/');
       foreach ($files as $path => $file) {
         // @TODO: Parse the info file or not?
         $info_file = file_get_contents($file->filename);
@@ -401,6 +402,7 @@ class FserverProject_git {
         $file->uri = "{$wrapper}fserver/{$base}.tgz";
         $file->filemime = file_get_mimetype($file->filename);
         $file->filesize = filesize($file->filepath);
+        $file->display = 1;
         $file->status = FILE_STATUS_PERMANENT;
         $file->timestamp = REQUEST_TIME;
         file_save($file);
