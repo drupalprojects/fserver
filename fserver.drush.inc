@@ -231,6 +231,7 @@ class FserverProject {
       $node->created = !empty($tag['timestamp']) ? $tag['timestamp'] : REQUEST_TIME;
       $node->uid = $this->node->uid;
       $node->title = "{$this->name} {$tag_id}";
+      $node->language = 'und';
       $node->body = !empty($tag['message']) ? $tag['message'] : '';
 
       $node->field_fserver_file = array(LANGUAGE_NONE => array(0 => (array) $file));
