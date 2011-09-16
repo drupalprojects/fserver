@@ -360,10 +360,10 @@ class FserverProject_git {
 
       // Retrieve tag info
       _drush_shell_exec_output_set(' '); // Clear output cache.
-      drush_op('drush_shell_exec', "git --git-dir={$this->path}/.git log -1 --pretty=format:%ct {$vc}");
+      drush_op('drush_shell_exec', "git --git-dir={$this->path}/.git --work-tree={$this->path} log -1 --pretty=format:%%ct {$vc}");
       $info = drush_shell_exec_output();
       $tag['timestamp'] = $info[0];
-      drush_op('drush_shell_exec', "git --git-dir={$this->path}/.git tag -l {$vc} -n 1000");
+      drush_op('drush_shell_exec', "git --git-dir={$this->path}/.git --work-tree={$this->path} tag -l {$vc} -n 1000");
       $info = drush_shell_exec_output();
       // Remove the tag from the first line of the message:
       $info[0] = str_replace($vc, '', $info[0]);
@@ -385,7 +385,7 @@ class FserverProject_git {
       // Create the directory if it doesn't exist.
       if (file_prepare_directory($file_path, TRUE)) {
         $vc = $tag['original'];
-        drush_op('drush_shell_exec', "git --git-dir={$this->path}/.git checkout {$vc}");
+        drush_op('drush_shell_exec', "git --git-dir={$this->path}/.git --work-tree={$this->path} checkout {$vc}");
         $this->FserverProject->write_package_info($tag, array('.git'));
         drush_op('drush_shell_exec', "tar -Pcf - --exclude='.git' --transform='s,{$this->path},{$this->FserverProject->name},' {$this->path} | gzip > {$file_path}/{$base}.tgz");
 
