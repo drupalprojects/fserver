@@ -406,6 +406,7 @@ function fserver_views_default_views() {
   $handler->display->display_options['relationships']['field_fserver_project_nid']['id'] = 'field_fserver_project_nid';
   $handler->display->display_options['relationships']['field_fserver_project_nid']['table'] = 'field_data_field_fserver_project';
   $handler->display->display_options['relationships']['field_fserver_project_nid']['field'] = 'field_fserver_project_nid';
+  $handler->display->display_options['relationships']['field_fserver_project_nid']['label'] = 'Project';
   $handler->display->display_options['relationships']['field_fserver_project_nid']['required'] = 1;
   $handler->display->display_options['relationships']['field_fserver_project_nid']['delta'] = '-1';
   /* Relationship: File Usage: File */
@@ -789,6 +790,33 @@ function fserver_views_default_views() {
   $handler->display->display_options['sorts']['created']['table'] = 'node';
   $handler->display->display_options['sorts']['created']['field'] = 'created';
   $handler->display->display_options['sorts']['created']['order'] = 'DESC';
+  /* Contextual filter: Content: Machine name (field_fserver_name) */
+  $handler->display->display_options['arguments']['field_fserver_name_value']['id'] = 'field_fserver_name_value';
+  $handler->display->display_options['arguments']['field_fserver_name_value']['table'] = 'field_data_field_fserver_name';
+  $handler->display->display_options['arguments']['field_fserver_name_value']['field'] = 'field_fserver_name_value';
+  $handler->display->display_options['arguments']['field_fserver_name_value']['relationship'] = 'field_fserver_project_nid';
+  $handler->display->display_options['arguments']['field_fserver_name_value']['default_argument_type'] = 'fixed';
+  $handler->display->display_options['arguments']['field_fserver_name_value']['default_argument_skip_url'] = 0;
+  $handler->display->display_options['arguments']['field_fserver_name_value']['summary']['number_of_records'] = '0';
+  $handler->display->display_options['arguments']['field_fserver_name_value']['summary']['format'] = 'default_summary';
+  $handler->display->display_options['arguments']['field_fserver_name_value']['summary_options']['items_per_page'] = '25';
+  $handler->display->display_options['arguments']['field_fserver_name_value']['glossary'] = 0;
+  $handler->display->display_options['arguments']['field_fserver_name_value']['limit'] = '0';
+  $handler->display->display_options['arguments']['field_fserver_name_value']['transform_dash'] = 0;
+  $handler->display->display_options['arguments']['field_fserver_name_value']['break_phrase'] = 0;
+  /* Contextual filter: Content: Core compatibility (field_fserver_api) */
+  $handler->display->display_options['arguments']['field_fserver_api_value']['id'] = 'field_fserver_api_value';
+  $handler->display->display_options['arguments']['field_fserver_api_value']['table'] = 'field_data_field_fserver_api';
+  $handler->display->display_options['arguments']['field_fserver_api_value']['field'] = 'field_fserver_api_value';
+  $handler->display->display_options['arguments']['field_fserver_api_value']['default_argument_type'] = 'fixed';
+  $handler->display->display_options['arguments']['field_fserver_api_value']['default_argument_skip_url'] = 0;
+  $handler->display->display_options['arguments']['field_fserver_api_value']['summary']['number_of_records'] = '0';
+  $handler->display->display_options['arguments']['field_fserver_api_value']['summary']['format'] = 'default_summary';
+  $handler->display->display_options['arguments']['field_fserver_api_value']['summary_options']['items_per_page'] = '25';
+  $handler->display->display_options['arguments']['field_fserver_api_value']['glossary'] = 0;
+  $handler->display->display_options['arguments']['field_fserver_api_value']['limit'] = '0';
+  $handler->display->display_options['arguments']['field_fserver_api_value']['transform_dash'] = 0;
+  $handler->display->display_options['arguments']['field_fserver_api_value']['break_phrase'] = 0;
   /* Filter criterion: Content: Published */
   $handler->display->display_options['filters']['status']['id'] = 'status';
   $handler->display->display_options['filters']['status']['table'] = 'node';
