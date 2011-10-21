@@ -5,7 +5,7 @@
  */
 
 /**
- * Implementation of hook_field_default_fields().
+ * Implements hook_field_default_fields().
  */
 function fserver_field_default_fields() {
   $fields = array();
@@ -836,6 +836,7 @@ function fserver_field_default_fields() {
         'active' => 1,
         'module' => 'nodereference_url',
         'settings' => array(
+          'autocomplete_match' => 'contains',
           'edit_fallback' => 0,
           'fallback' => 'select',
           'node_link' => array(

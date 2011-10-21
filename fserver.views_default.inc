@@ -5,15 +5,15 @@
  */
 
 /**
- * Implementation of hook_views_default_views().
+ * Implements hook_views_default_views().
  */
 function fserver_views_default_views() {
   $export = array();
 
   $view = new view;
   $view->name = 'fserver_projects';
-  $view->description = '';
-  $view->tag = 'default';
+  $view->description = 'FServer Projects and Distributions listing';
+  $view->tag = 'fserver';
   $view->base_table = 'node';
   $view->human_name = 'Projects and Distributions';
   $view->core = 7;
@@ -77,8 +77,8 @@ function fserver_views_default_views() {
 
   $view = new view;
   $view->name = 'fserver_release_lookup';
-  $view->description = '';
-  $view->tag = 'default';
+  $view->description = 'FServer Release Lookup';
+  $view->tag = 'fserver';
   $view->base_table = 'node';
   $view->human_name = 'Release Lookup';
   $view->core = 7;
@@ -176,8 +176,8 @@ function fserver_views_default_views() {
 
   $view = new view;
   $view->name = 'fserver_releases';
-  $view->description = '';
-  $view->tag = 'default';
+  $view->description = 'Fserver Project Releases';
+  $view->tag = 'fserver';
   $view->base_table = 'node';
   $view->human_name = 'Releases';
   $view->core = 7;
@@ -374,18 +374,40 @@ function fserver_views_default_views() {
   $handler->display->display_options['menu']['weight'] = '0';
 
   /* Display: Block */
-  $handler = $view->new_display('block', 'Block', 'block');
+  $handler = $view->new_display('block', 'Block', 'recommended');
   $handler->display->display_options['defaults']['title'] = FALSE;
   $handler->display->display_options['title'] = 'Recommended Releases';
   $handler->display->display_options['defaults']['pager'] = FALSE;
   $handler->display->display_options['pager']['type'] = 'full';
   $handler->display->display_options['pager']['options']['items_per_page'] = '5';
+  $handler->display->display_options['defaults']['filters'] = FALSE;
+  /* Filter criterion: Content: Published */
+  $handler->display->display_options['filters']['status']['id'] = 'status';
+  $handler->display->display_options['filters']['status']['table'] = 'node';
+  $handler->display->display_options['filters']['status']['field'] = 'status';
+  $handler->display->display_options['filters']['status']['value'] = 1;
+  $handler->display->display_options['filters']['status']['group'] = 0;
+  $handler->display->display_options['filters']['status']['expose']['operator'] = FALSE;
+  /* Filter criterion: Content: Type */
+  $handler->display->display_options['filters']['type']['id'] = 'type';
+  $handler->display->display_options['filters']['type']['table'] = 'node';
+  $handler->display->display_options['filters']['type']['field'] = 'type';
+  $handler->display->display_options['filters']['type']['value'] = array(
+    'fserver_release' => 'fserver_release',
+  );
+  /* Filter criterion: Content: Recommended (field_fserver_recommended) */
+  $handler->display->display_options['filters']['field_fserver_recommended_value']['id'] = 'field_fserver_recommended_value';
+  $handler->display->display_options['filters']['field_fserver_recommended_value']['table'] = 'field_data_field_fserver_recommended';
+  $handler->display->display_options['filters']['field_fserver_recommended_value']['field'] = 'field_fserver_recommended_value';
+  $handler->display->display_options['filters']['field_fserver_recommended_value']['value'] = array(
+    1 => '1',
+  );
   $export['fserver_releases'] = $view;
 
   $view = new view;
   $view->name = 'fserver_updates';
-  $view->description = '';
-  $view->tag = 'default';
+  $view->description = 'FServer XML lookup';
+  $view->tag = 'fserver';
   $view->base_table = 'node';
   $view->human_name = 'Updates';
   $view->core = 7;

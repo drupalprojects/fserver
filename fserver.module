@@ -21,9 +21,9 @@ function fserver_link($type, $object, $teaser = FALSE) {
 function fserver_node_view($node, $view_mode = 'full') {
   if ($node->type == 'fserver_distro' && is_object(menu_get_object()) && menu_get_object()->nid === $node->nid) {
     //$node->content['field_fserver_drushmake'][0]['value'] = '<code>'. $node->field_fserver_drushmake[0]['value'] .'</code>';
-    $node->content['field_fserver_drushmake']['field']['items'][0]['#item']['safe'] = '<fieldset>' . implode('<br />', explode("\r\n", $node->content['field_fserver_drushmake']['field']['items'][0]['#item']['safe'])) . '</fieldset>';
+    $node->content['field_fserver_drushmake'][0]['#markup'] = '<fieldset>' . implode('<br />', explode("\r\n", $node->content['field_fserver_drushmake']['#items'][0]['safe_value'])) . '</fieldset>';
     $view = views_get_view('fserver_releases');
-    $view->execute('block_1');
+    $view->execute('recommended');
     if ($view->result) {
       $node->content['releases'] = array(
         '#type' => 'item',
@@ -71,7 +71,7 @@ function fserver_node_view($node, $view_mode = 'full') {
       }
     }
     $view = views_get_view('fserver_releases');
-    $view->execute('block_1');
+    $view->execute('recommended');
     if ($view->result) {
       $node->content['releases'] = array(
         '#type' => 'item',
