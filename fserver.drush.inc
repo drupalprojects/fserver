@@ -399,7 +399,7 @@ class FserverProject_git {
         // Create the directory if it doesn't exist.
         if (file_check_directory($file_path, TRUE)) {
           $vc = $tag['original'];
-          drush_op('drush_shell_exec', "git --git-dir={$this->path}/.git checkout {$vc}");
+          drush_op('drush_shell_exec', "git --work-tree={$this->path} --git-dir={$this->path}/.git checkout {$vc}");
           $this->FserverProject->write_package_info($tag, array('.git'));
           $path = $this->path;
           if (!empty($this->FserverProject->repo_subdir)) {
