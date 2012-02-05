@@ -243,7 +243,8 @@ class FserverProject {
         $node->created = !empty($tag['timestamp']) ? $tag['timestamp'] : time();
         $node->uid = $this->node->uid;
         $node->title = "{$this->name} {$tag_id}";
-	$node->body = array(LANGUAGE_NONE => array(0 => array('value' => !empty($tag['message']) ? $tag['message'] : '')));
+        $node->body = !empty($tag['message']) ? $tag['message'] : '';
+        $node->body = '';
         $node->field_fserver_file = array(0 => (array) $file);
         $node->field_fserver_project = array(0 => array('nid' => $this->node->nid));
         $node->field_fserver_api = array(0 => array('value' => $tag['core']));
@@ -288,18 +289,22 @@ class FserverProject {
    */
   function write_package_info($tag, $exclude_mask = array('.', '..', 'CVS')) {
     if (isset($this->backend)) {
+
       $fserver_url = url("fserver", array('purl' => array('disabled' => TRUE), 'absolute' => TRUE));
 
       $packaging = array();
-      $packaging[] = "; Information added by fserver";
+      $packaging[] = "; <- FSERVER AUTOMATED AREA //START ->";
       $packaging[] = "core = \"{$tag['core']}\"";
       $packaging[] = "datestamp = \"{$tag['timestamp']}\"";
       $packaging[] = "project = \"{$this->name}\"";
       $packaging[] = "project status url = \"{$fserver_url}\"";
       $packaging[] = "version = \"{$tag['version']}\"";
+      $packaging[] = "; <- FSERVER AUTOMATED AREA //END ->";
       $packaging = "\n" . implode("\n", $packaging);
 
+
       $files = file_scan_directory($this->backend->path, '.info$', $exclude_mask);
+
       foreach ($files as $path => $file) {
         // @TODO: Parse the info file or not?
         $info_file = file_get_contents($file->filename);
@@ -339,7 +344,10 @@ class FserverProject_git {
   function init_wc() {
     if (!isset($this->path)) {
       $this->path = file_directory_temp() . '/fserver_git_'. $this->FserverProject->name .'_'. time();
-      drush_op('drush_shell_exec', "git clone {$this->FserverProject->repository} {$this->path}");
+      // we use the --mirror trick to actually checkout all branches / refs...because tags could have been created everywhere
+      drush_op('drush_shell_exec', "git clone --mirror {$this->FserverProject->repository} {$this->path}/.git");
+      drush_op('drush_shell_exec', "git --git-dir={$this->path}/.git --work-tree={$this->path} config core.bare false");
+      drush_op('drush_shell_exec', "git --git-dir={$this->path}/.git --work-tree={$this->path} checkout master");
     }
   }
 
@@ -347,6 +355,7 @@ class FserverProject_git {
   * Get tags for this project.
   */
   function get_tags() {
+    // This is called before a wc even got created, so we cant use show-ref
     if (!isset($this->tags)) {
       $this->tags = array();
       _drush_shell_exec_output_set(' '); // Clear output cache.
@@ -373,14 +382,14 @@ class FserverProject_git {
       $this->init_wc();
 
       // Retrieve tag info
-     _drush_shell_exec_output_set(' '); // Clear output cache.
-      drush_op('drush_shell_exec', "git --git-dir={$this->path}/.git log -1 --pretty=format:%%ct {$vc}");
+      _drush_shell_exec_output_set(' '); // Clear output cache.
+      drush_op('drush_shell_exec', "git --git-dir={$this->path}/.git --work-tree={$this->path} log -1 --pretty=format:%%ct {$vc}");
       $info = drush_shell_exec_output();
       $tag['timestamp'] = $info[0];
-      drush_op('drush_shell_exec', "git --git-dir={$this->path}/.git --work-tree={$this->path} show --format=%%b {$vc} -n 1001");
+      _drush_shell_exec_output_set(' '); // Clear output cache.
+      drush_op('drush_shell_exec', "git --git-dir={$this->path}/.git --work-tree={$this->path} log -1 --pretty=format:'%%s' {$vc}");
       $info = drush_shell_exec_output();
       // Remove the tag from the first line of the message:
-      $info = array_slice($info, 2);
       $tag['message'] = implode("\n", $info);
       return $tag;
     }
@@ -398,13 +407,16 @@ class FserverProject_git {
         // Create the directory if it doesn't exist.
         if (file_check_directory($file_path, TRUE)) {
           $vc = $tag['original'];
-          drush_op('drush_shell_exec', "git --work-tree={$this->path} --git-dir={$this->path}/.git checkout {$vc}");
+          drush_op('drush_shell_exec', "git --git-dir={$this->path}/.git --work-tree={$this->path} checkout refs/tags/{$vc}");
           $this->FserverProject->write_package_info($tag, array('.git'));
           $path = $this->path;
           if (!empty($this->FserverProject->repo_subdir)) {
             $path .= '/' . $this->FserverProject->repo_subdir;
           }
           drush_op('drush_shell_exec', "tar -Pcf - --exclude='.git' --transform='s,$path,{$this->FserverProject->name},' $path | gzip > {$file_path}/{$base}.tgz");
+
+          // be sure to cleanup the repo
+          drush_op('drush_shell_exec', "git --git-dir={$this->path}/.git --work-tree={$this->path} reset --hard");
 
           // @TODO
           // We need to properly chown and permission these directories.
