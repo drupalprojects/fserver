@@ -128,7 +128,7 @@ function _fserver_drush_get_projects() {
     $result = db_query("SELECT nid, title FROM {node} WHERE type = 'fserver_project' AND status = 1");
     while ($row = db_fetch_object($result)) {
       $node = node_load($row->nid);
-      $project = new FserverProject($node, $node->field_fserver_name[0]['value'], $node->field_fserver_method[0]['value'], $node->field_fserver_repository[0]['value']);
+      $project = new FserverProject($node, $node->field_fserver_name[0]['value'], $node->field_fserver_method[0]['value'], $node->field_fserver_repository[0]['value'], $node->field_fserver_repository_subdir[0]['value']);
       $projects[$project->name] = $project;
     }
   }
@@ -149,11 +149,12 @@ class FserverProject {
   /**
    * Constructor.
    */
-  function __construct($node, $name, $method, $repository) {
+  function __construct($node, $name, $method, $repository, $repo_subdir = '') {
     $this->node = $node;
     $this->name = $name;
     $this->method = $method;
     $this->repository = $repository;
+    $this->repo_subdir = $repo_subdir;
 
     // We try to create a backend for us to user later:
     $method_class = 'FserverProject_' . $this->method;
@@ -178,7 +179,7 @@ class FserverProject {
     $new_tags = array();
     $releases = $this->get_releases();
     foreach ($this->get_tags() as $tag_id => $tag) {
-      if (!isset($releases[$tag_id])) {
+      if (!isset($releases[$tag_id]) || $releases[$tag_id] == TRUE) {
         $new_tags[$tag_id] = $tag;
       }
     }
@@ -195,7 +196,13 @@ class FserverProject {
       while ($row = db_fetch_object($result)) {
         $node = node_load($row->nid);
         if ($node && isset($node->field_fserver_project[0]['nid']) && $node->field_fserver_project[0]['nid'] == $this->node->nid) {
-          $this->releases[fserver_generate_version($node, TRUE)] = $node;
+          $version= fserver_generate_version($node, TRUE);
+          $this->releases[$version]['node'] = $node;
+          $this->releases[$version]['dev'] = 0;
+          // mark dev versions
+          if (isset($node->field_fserver_dev_version[0]['value']) || $node->field_fserver_dev_version[0]['value'] == '1') {
+            $this->releases[$version]['dev'] = 1;
+          }
         }
       }
     }
@@ -224,36 +231,44 @@ class FserverProject {
   function create_release($tag_id) {
     $tag = $this->get_tag($tag_id);
     if ($tag && $file = $this->create_package($tag_id)) {
-      $node = new stdClass();
-      $node->type = 'fserver_release';
-      $node->status = 1;
-      $node->created = !empty($tag['timestamp']) ? $tag['timestamp'] : time();
-      $node->uid = $this->node->uid;
-      $node->title = "{$this->name} {$tag_id}";
-      $node->body = !empty($tag['message']) ? $tag['message'] : '';
-
-      $node->field_fserver_file = array(0 => (array) $file);
-      $node->field_fserver_project = array(0 => array('nid' => $this->node->nid));
-      $node->field_fserver_api = array(0 => array('value' => $tag['core']));
-      $node->field_fserver_versionmajor = array(0 => array('value' => $tag['major']));
-      $node->field_fserver_versionpatch = array(0 => array('value' => $tag['patch']));
-      $node->field_fserver_versionextra = array(0 => array('value' => $tag['extra']));
-
-      // Handle the release extra info
-      $extratype = FSERVER_EXTRATYPE_RELEASE;
-      $extranum = NULL;
-      if (!empty($tag['extra'])) {
-        $extratypes = fserver_cck_options('extratype');
-        $extratypes = array_flip($extratypes);
-        $extratype = array_key_exists($tag['extratype'], $extratypes) ? $extratypes[$tag['extratype']] : FSERVER_EXTRATYPE_OTHER;
-        $extranum = $tag['extranum'];
+      // check for dev version, only need to replace the file
+      if (isset($this->releases[$tag_id]) && $this->releases[$tag_id]['dev']) {
+        $node = node_load($this->releases[$tag_id]['node']->nid);
+        $node->field_fserver_file = array(0 => (array) $file);
       }
-      $node->field_fserver_versionextratype = array(0 => array('value' => $extratype));
-      $node->field_fserver_versionextranum = array(0 => array('value' => $extranum));
+      else {
+        $node = new stdClass();
+        $node->type = 'fserver_release';
+        $node->status = 1;
+        $node->created = !empty($tag['timestamp']) ? $tag['timestamp'] : time();
+        $node->uid = $this->node->uid;
+        $node->title = "{$this->name} {$tag_id}";
+        $node->body = !empty($tag['message']) ? $tag['message'] : '';
 
-      // @TODO
-      $node->field_fserver_recommended = array(0 => array('value' => 1));
-      $node->field_fserver_security = array(0 => array('value' => 0));
+        $node->field_fserver_file = array(0 => (array) $file);
+        $node->field_fserver_project = array(0 => array('nid' => $this->node->nid));
+        $node->field_fserver_api = array(0 => array('value' => $tag['core']));
+        $node->field_fserver_versionmajor = array(0 => array('value' => $tag['major']));
+        $node->field_fserver_versionpatch = array(0 => array('value' => $tag['patch']));
+        $node->field_fserver_versionextra = array(0 => array('value' => $tag['extra']));
+
+        // Handle the release extra info
+        $extratype = FSERVER_EXTRATYPE_RELEASE;
+        $extranum = NULL;
+        if (!empty($tag['extra'])) {
+          $extratypes = fserver_cck_options('extratype');
+          $extratypes = array_flip($extratypes);
+          $extratype = array_key_exists($tag['extratype'], $extratypes) ? $extratypes[$tag['extratype']] : FSERVER_EXTRATYPE_OTHER;
+          $extranum = $tag['extranum'];
+        }
+        $node->field_fserver_versionextratype = array(0 => array('value' => $extratype));
+        $node->field_fserver_versionextranum = array(0 => array('value' => $extranum));
+
+        // @TODO
+        $node->field_fserver_recommended = array(0 => array('value' => 1));
+        $node->field_fserver_dev_version = array(0 => array('value' => 0));
+        $node->field_fserver_security = array(0 => array('value' => 0));
+      }
       node_save($node);
     }
     return $node;
@@ -338,6 +353,8 @@ class FserverProject_git {
       _drush_shell_exec_output_set(' '); // Clear output cache.
       drush_op('drush_shell_exec', "git ls-remote --tags {$this->FserverProject->repository} | awk '{print $2;}'");
       $lines = drush_shell_exec_output();
+      drush_op('drush_shell_exec', "git ls-remote --heads {$this->FserverProject->repository} | awk '{print $2;}'");
+      $lines = array_merge($lines, drush_shell_exec_output());
       while ($line = array_shift($lines)) {
         $vc = array_pop(explode('/', $line));
         $parsed = fserver_parse_tag_name($vc);
@@ -358,7 +375,7 @@ class FserverProject_git {
 
       // Retrieve tag info
      _drush_shell_exec_output_set(' '); // Clear output cache.
-      drush_op('drush_shell_exec', "git --git-dir={$this->path}/.git log -1 --pretty=format:%ct {$vc}");
+      drush_op('drush_shell_exec', "git --git-dir={$this->path}/.git log -1 --pretty=format:%%ct {$vc}");
       $info = drush_shell_exec_output();
       $tag['timestamp'] = $info[0];
       drush_op('drush_shell_exec', "git --git-dir={$this->path}/.git tag -l {$vc} -n 1000");
@@ -384,7 +401,11 @@ class FserverProject_git {
           $vc = $tag['original'];
           drush_op('drush_shell_exec', "git --git-dir={$this->path}/.git checkout {$vc}");
           $this->FserverProject->write_package_info($tag, array('.git'));
-          drush_op('drush_shell_exec', "tar -Pcf - --exclude='.git' --transform='s,{$this->path},{$this->FserverProject->name},' {$this->path} | gzip > {$file_path}/{$base}.tgz");
+          $path = $this->path;
+          if (!empty($this->FserverProject->repo_subdir)) {
+            $path .= '/' . $this->FserverProject->repo_subdir;
+          }
+          drush_op('drush_shell_exec', "tar -Pcf - --exclude='.git' --transform='s,$path,{$this->FserverProject->name},' $path | gzip > {$file_path}/{$base}.tgz");
 
           // @TODO
           // We need to properly chown and permission these directories.

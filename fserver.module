@@ -120,9 +120,13 @@ function fserver_cck_options($type = 'core') {
       break;
     case 'patch':
       $result = range(0, 50);
+      $result['x'] = 'x';
       break;
     case 'recommended':
       $result =  array(t('Not recommended'), t('Recommended'));
+      break;
+    case 'dev_version':
+      $result =  array(t('Normal version'), t('Development version'));
       break;
     case 'security':
       $result =  array(t('Not a security release'), t('Security release'));
@@ -166,7 +170,7 @@ function fserver_cck_options($type = 'core') {
  */
 function fserver_parse_package_name($package_filename) {
   // example: fserver-6.x-2.0-rc3.tar.gz
-  if (preg_match('/^(?<project>\w+)-(?<core>\d+\.x)-(?<major>\d+)\.(?<patch>\d+)-?(?<extra>\w+)?\.(tar\.gz|tgz)$/', $package_filename, $matches)) {
+  if (preg_match('/^(?<project>\w+)-(?<core>\d+\.x)-(?<major>\d+)\.(?<patch>[\d|x]+)-?(?<extra>\w+)?\.(tar\.gz|tgz)$/', $package_filename, $matches)) {
     if (!empty($matches['extra']) && preg_match('/^(?P<extratype>[A-Za-z]+)(?P<extranum>\d+)?$/', $matches['extra'], $extra_matches)) {
       $matches = array_merge($matches, array_intersect_key($extra_matches, array('extratype' => '', 'extranum' => '')));
     }
@@ -181,10 +185,9 @@ function fserver_parse_package_name($package_filename) {
  * Supports CVS style drupal tags (drupal-6--1-0-alpha1) as well as git style tags (7.x-1.0-alpha1).
  */
 function fserver_parse_tag_name($tag) {
-
   $regex = (stripos($tag, 'drupal-') === 0)
               ? '/^(?P<project>\w+)-(?P<core>\d+)--(?P<major>\d+)-(?P<patch>\d+)-?(?P<extra>\w+)?$/'
-              : '/^(?P<core>\d+)\.x-(?P<major>\d+)\.(?P<patch>\d+)-?(?P<extra>\w+)?$/';
+              : '/^(?P<core>\d+)\.x-(?P<major>\d+)\.(?P<patch>[\d|x]+)-?(?P<extra>\w+)?$/';
 
   if (preg_match($regex, $tag, $matches)) {
     $parsed = array_intersect_key($matches, array('core' => '', 'major' => '', 'patch' => '', 'extra' => ''));

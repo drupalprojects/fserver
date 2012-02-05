@@ -112,7 +112,7 @@ function fserver_content_default_fields() {
     'field_name' => 'field_fserver_method',
     'type_name' => 'fserver_project',
     'display_settings' => array(
-      'weight' => '-2',
+      'weight' => '1',
       'parent' => '',
       'label' => array(
         'format' => 'hidden',
@@ -211,19 +211,20 @@ function fserver_content_default_fields() {
     'field_name' => 'field_fserver_redirect',
     'type_name' => 'fserver_project',
     'display_settings' => array(
+      'weight' => '3',
+      'parent' => '',
       'label' => array(
-        'format' => 'above',
-        'exclude' => 0,
-      ),
-      '5' => array(
-        'format' => 'default',
-        'exclude' => 0,
+        'format' => 'inline',
       ),
       'teaser' => array(
         'format' => 'default',
         'exclude' => 0,
       ),
       'full' => array(
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      '5' => array(
         'format' => 'default',
         'exclude' => 0,
       ),
@@ -273,7 +274,7 @@ function fserver_content_default_fields() {
     'field_name' => 'field_fserver_repository',
     'type_name' => 'fserver_project',
     'display_settings' => array(
-      'weight' => '-1',
+      'weight' => '2',
       'parent' => '',
       'label' => array(
         'format' => 'inline',
@@ -319,12 +320,63 @@ function fserver_content_default_fields() {
     ),
   );
 
+  // Exported field: field_fserver_repository_subdir
+  $fields['fserver_project-field_fserver_repository_subdir'] = array(
+    'field_name' => 'field_fserver_repository_subdir',
+    'type_name' => 'fserver_project',
+    'display_settings' => array(
+      'weight' => '2',
+      'parent' => '',
+      'label' => array(
+        'format' => 'inline',
+      ),
+      'teaser' => array(
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'full' => array(
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      '4' => array(
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+    ),
+    'widget_active' => '1',
+    'type' => 'text',
+    'required' => '0',
+    'multiple' => '0',
+    'module' => 'text',
+    'active' => '1',
+    'text_processing' => '0',
+    'max_length' => '',
+    'allowed_values' => '',
+    'allowed_values_php' => '',
+    'widget' => array(
+      'rows' => 5,
+      'size' => '60',
+      'default_value' => array(
+        '0' => array(
+          'value' => '',
+          '_error_element' => 'default_value_widget][field_fserver_repository_subdir][0][value',
+        ),
+      ),
+      'default_value_php' => NULL,
+      'label' => 'Repo subdir',
+      'weight' => '2',
+      'description' => 'Specify the subdir for the project in the repository',
+      'type' => 'text_textfield',
+      'module' => 'text',
+    ),
+  );
+
   // Exported field: field_fserver_type
   $fields['fserver_project-field_fserver_type'] = array(
     'field_name' => 'field_fserver_type',
     'type_name' => 'fserver_project',
     'display_settings' => array(
-      'weight' => '-3',
+      'weight' => '-2',
       'parent' => '',
       'label' => array(
         'format' => 'hidden',
@@ -372,7 +424,7 @@ function fserver_content_default_fields() {
     'field_name' => 'field_fserver_api',
     'type_name' => 'fserver_release',
     'display_settings' => array(
-      'weight' => '-10',
+      'weight' => '-11',
       'parent' => '',
       'label' => array(
         'format' => 'hidden',
@@ -411,6 +463,54 @@ function fserver_content_default_fields() {
       'weight' => '-11',
       'description' => '',
       'type' => 'optionwidgets_select',
+      'module' => 'optionwidgets',
+    ),
+  );
+
+  // Exported field: field_fserver_dev_version
+  $fields['fserver_release-field_fserver_dev_version'] = array(
+    'field_name' => 'field_fserver_dev_version',
+    'type_name' => 'fserver_release',
+    'display_settings' => array(
+      'weight' => '-3',
+      'parent' => '',
+      'label' => array(
+        'format' => 'inline',
+      ),
+      'teaser' => array(
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'full' => array(
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      '4' => array(
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+    ),
+    'widget_active' => '1',
+    'type' => 'text',
+    'required' => '1',
+    'multiple' => '0',
+    'module' => 'text',
+    'active' => '1',
+    'text_processing' => '0',
+    'max_length' => '',
+    'allowed_values' => '',
+    'allowed_values_php' => 'return fserver_cck_options(\'dev_version\');',
+    'widget' => array(
+      'default_value' => array(
+        '0' => array(
+          'value' => NULL,
+        ),
+      ),
+      'default_value_php' => NULL,
+      'label' => 'Dev version',
+      'weight' => '-3',
+      'description' => '',
+      'type' => 'optionwidgets_onoff',
       'module' => 'optionwidgets',
     ),
   );
@@ -466,7 +566,7 @@ function fserver_content_default_fields() {
     'field_name' => 'field_fserver_project',
     'type_name' => 'fserver_release',
     'display_settings' => array(
-      'weight' => '-11',
+      'weight' => '-12',
       'parent' => '',
       'label' => array(
         'format' => 'hidden',
@@ -530,7 +630,7 @@ function fserver_content_default_fields() {
     'field_name' => 'field_fserver_recommended',
     'type_name' => 'fserver_release',
     'display_settings' => array(
-      'weight' => '-6',
+      'weight' => '-5',
       'parent' => '',
       'label' => array(
         'format' => 'hidden',
@@ -578,7 +678,7 @@ function fserver_content_default_fields() {
     'field_name' => 'field_fserver_security',
     'type_name' => 'fserver_release',
     'display_settings' => array(
-      'weight' => '-5',
+      'weight' => '-4',
       'parent' => '',
       'label' => array(
         'format' => 'hidden',
@@ -626,7 +726,7 @@ function fserver_content_default_fields() {
     'field_name' => 'field_fserver_versionextra',
     'type_name' => 'fserver_release',
     'display_settings' => array(
-      'weight' => '-7',
+      'weight' => '-8',
       'parent' => '',
       'label' => array(
         'format' => 'hidden',
@@ -677,9 +777,10 @@ function fserver_content_default_fields() {
     'field_name' => 'field_fserver_versionextranum',
     'type_name' => 'fserver_release',
     'display_settings' => array(
+      'weight' => '-6',
+      'parent' => '',
       'label' => array(
-        'format' => 'above',
-        'exclude' => 0,
+        'format' => 'inline',
       ),
       'teaser' => array(
         'format' => 'default',
@@ -730,9 +831,10 @@ function fserver_content_default_fields() {
     'field_name' => 'field_fserver_versionextratype',
     'type_name' => 'fserver_release',
     'display_settings' => array(
+      'weight' => '-7',
+      'parent' => '',
       'label' => array(
-        'format' => 'above',
-        'exclude' => 0,
+        'format' => 'inline',
       ),
       'teaser' => array(
         'format' => 'default',
@@ -783,7 +885,7 @@ function fserver_content_default_fields() {
     'field_name' => 'field_fserver_versionmajor',
     'type_name' => 'fserver_release',
     'display_settings' => array(
-      'weight' => '-9',
+      'weight' => '-10',
       'parent' => '',
       'label' => array(
         'format' => 'hidden',
@@ -833,7 +935,7 @@ function fserver_content_default_fields() {
     'field_name' => 'field_fserver_versionpatch',
     'type_name' => 'fserver_release',
     'display_settings' => array(
-      'weight' => '-8',
+      'weight' => '-9',
       'parent' => '',
       'label' => array(
         'format' => 'hidden',
@@ -852,15 +954,13 @@ function fserver_content_default_fields() {
       ),
     ),
     'widget_active' => '1',
-    'type' => 'number_integer',
+    'type' => 'text',
     'required' => '1',
     'multiple' => '0',
-    'module' => 'number',
+    'module' => 'text',
     'active' => '1',
-    'prefix' => '',
-    'suffix' => '',
-    'min' => '0',
-    'max' => '50',
+    'text_processing' => '',
+    'max_length' => '',
     'allowed_values' => '',
     'allowed_values_php' => 'return fserver_cck_options(\'patch\');',
     'widget' => array(
@@ -873,14 +973,15 @@ function fserver_content_default_fields() {
       'label' => 'Patch version',
       'weight' => '-9',
       'description' => '',
-      'type' => 'optionwidgets_select',
-      'module' => 'optionwidgets',
+      'type' => 'text_textfield',
+      'module' => 'text',
     ),
   );
 
   // Translatables
   // Included for use with string extractors like potx.
   t('Core compatibility');
+  t('Dev version');
   t('Drush Make Script');
   t('Extra version');
   t('Extra version number');
@@ -893,6 +994,7 @@ function fserver_content_default_fields() {
   t('Project');
   t('Recommended');
   t('Redirect URL (for legacy projects)');
+  t('Repo subdir');
   t('Repository URL');
   t('Security release');
   t('Type');
