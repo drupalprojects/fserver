@@ -243,8 +243,7 @@ class FserverProject {
         $node->created = !empty($tag['timestamp']) ? $tag['timestamp'] : time();
         $node->uid = $this->node->uid;
         $node->title = "{$this->name} {$tag_id}";
-        $node->body = !empty($tag['message']) ? $tag['message'] : '';
-
+	$node->body = array(LANGUAGE_NONE => array(0 => array('value' => !empty($tag['message']) ? $tag['message'] : '')));
         $node->field_fserver_file = array(0 => (array) $file);
         $node->field_fserver_project = array(0 => array('nid' => $this->node->nid));
         $node->field_fserver_api = array(0 => array('value' => $tag['core']));
@@ -378,10 +377,10 @@ class FserverProject_git {
       drush_op('drush_shell_exec', "git --git-dir={$this->path}/.git log -1 --pretty=format:%%ct {$vc}");
       $info = drush_shell_exec_output();
       $tag['timestamp'] = $info[0];
-      drush_op('drush_shell_exec', "git --git-dir={$this->path}/.git tag -l {$vc} -n 1000");
+      drush_op('drush_shell_exec', "git --git-dir={$this->path}/.git --work-tree={$this->path} show --format=%%b {$vc} -n 1001");
       $info = drush_shell_exec_output();
       // Remove the tag from the first line of the message:
-      $info[0] = str_replace($vc, '', $info[0]);
+      $info = array_slice($info, 2);
       $tag['message'] = implode("\n", $info);
       return $tag;
     }
