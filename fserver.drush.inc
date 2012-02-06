@@ -179,7 +179,7 @@ class FserverProject {
     $new_tags = array();
     $releases = $this->get_releases();
     foreach ($this->get_tags() as $tag_id => $tag) {
-      if (!isset($releases[$tag_id]) || $releases[$tag_id] == TRUE) {
+      if (!isset($releases[$tag_id])) {
         $new_tags[$tag_id] = $tag;
       }
     }
@@ -244,7 +244,6 @@ class FserverProject {
         $node->uid = $this->node->uid;
         $node->title = "{$this->name} {$tag_id}";
         $node->body = !empty($tag['message']) ? $tag['message'] : '';
-        $node->body = '';
         $node->field_fserver_file = array(0 => (array) $file);
         $node->field_fserver_project = array(0 => array('nid' => $this->node->nid));
         $node->field_fserver_api = array(0 => array('value' => $tag['core']));
